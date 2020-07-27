@@ -9,16 +9,14 @@
 #     return r
 
 ##############################################
-import numpy as np
 
 # pythran export dprod(float64[:], float[:])
 def dprod(l0, l1):
-    return l0 @ l1
-    # n = len(l0)
-    # r = 0
-    # for i in range(n):
-    #     r += l0[i] * l1[i]
-    # return r
+    n = len(l0)
+    r = 0
+    for i in range(n):
+        r += l0[i] * l1[i]
+    return r
 
 ##############################################
 # for numba test
