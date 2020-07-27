@@ -1,0 +1,278 @@
+def sum(x, y) return x + y
+             ^Error: expected `:`
+
+
+def (x, y):
+    ^Error: expected function name
+    return x + y
+
+
+def sum x, y:
+        ^Error: expected `(` after function name
+    return x + y
+# )
+
+
+def sum(, y):
+        ^Error: expected function's argument name
+    return x + y
+
+
+def sum(x y): # (
+          ^Error: expected `,` or `)` in function's arguments list
+    return x + y
+
+
+is
+^Error: unrecognized statement started with keyword
+
+
+class (Base):
+      ^Error: expected class name
+    pass
+
+
+class Class():
+            ^Error: expected base class name
+    pass
+
+
+i : 0
+    ^Error: expected type name
+
+
+i : str int
+        ^Error: expected end of statement
+
+
+# [
+t : Tuple[str int]
+              ^Error: expected `,` or `]` in type's arguments list
+
+
+a.,
+  ^Error: expected an attribute name
+
+
+r = %a
+    ^Error: unknown unary operator
+
+
+---
+r = a ~ b
+      ^Error: unknown binary operator
+
+
+r = pass
+    ^Error: no symbol corresponding to token `pass` (belonging to Category.KEYWORD) found while parsing expression
+
+
+r = a pass b
+      ^Error: no symbol corresponding to token `pass` (belonging to Category.KEYWORD) found while parsing expression
+
+
+---
+if a and b or c
+    return
+^Error: no symbol corresponding to token `    ` (belonging to Category.INDENT) found while parsing expression
+
+
+a : bool
+b : bool
+c : bool
+if a and b or c:
+   ^Error: relative precedence of operators `and` and `or` is undetermined; please add parentheses this way:\
+`(a and b) or c`\
+or this way:\
+`a and (b or c)`
+    return
+
+
+a : bool
+b : bool
+c : bool
+if a or b and c:
+   ^Error: relative precedence of operators `and` and `or` is undetermined; please add parentheses this way:\
+`(a or b) and c`\
+or this way:\
+`a or (b and c)`
+    return
+
+
+a : bool
+b : bool
+c : bool
+d : bool
+if d and (a or b and c):
+          ^Error: relative precedence of operators `and` and `or` is undetermined; please add parentheses this way:\
+`(a or b) and c`\
+or this way:\
+`a or (b and c)`
+    return
+
+
+class ASTIf:
+    pass
+if (self.parent is None and isinstance(self.ast_parent, ASTIf)) or self.parent is not None and self.parent.symbol.id == 'if':
+   ^Error: relative precedence of operators `and` and `or` is undetermined; please add parentheses this way:\
+`((self.parent is None and isinstance(self.ast_parent, ASTIf)) or self.parent is not None) and self.parent.symbol.id == 'if'`\
+or this way:\
+`(self.parent is None and isinstance(self.ast_parent, ASTIf)) or (self.parent is not None and self.parent.symbol.id == 'if')`
+    return
+
+
+class ASTIf:
+    pass
+if self.parent is None and isinstance(self.ast_parent, ASTIf) or (self.parent is not None and self.parent.symbol.id == 'if'):
+                                                                                                                              ^Error: expected an indented block
+
+
+class ASTIf:
+    pass
+if self.parent is None and isinstance(self.ast_parent, ASTIf) or (self.parent is not None and self.parent.symbol.id == 'if'):
+   ^Error: relative precedence of operators `and` and `or` is undetermined; please add parentheses this way:\
+`(self.parent is None and isinstance(self.ast_parent, ASTIf)) or (self.parent is not None and self.parent.symbol.id == 'if')`\
+or this way:\
+`self.parent is None and (isinstance(self.ast_parent, ASTIf) or (self.parent is not None and self.parent.symbol.id == 'if'))`
+    return
+
+
+class ASTIf:
+    pass
+if (self.parent is None and isinstance(self.ast_parent, ASTIf)) or (lambda: 1) and lambda: 2:
+   ^Error: relative precedence of operators `and` and `or` is undetermined; please add parentheses this way:\
+`((self.parent is None and isinstance(self.ast_parent, ASTIf)) or (lambda: 1)) and lambda: 2`\
+or this way:\
+`(self.parent is None and isinstance(self.ast_parent, ASTIf)) or ((lambda: 1) and lambda: 2)`
+    return
+
+
+x = lambda , x
+           ^Error: expected an argument name
+
+
+1 not 2
+      ^Error: invalid syntax
+
+
+i : int = 0
+i : int = 1
+^Error: redefinition of already defined variable is not allowed
+
+
+i = j
+    ^Error: undefined identifier
+
+
+nonlocal i,
+            ^Error: expected nonlocal variable name
+
+
+V l = lambda: None
+  ^Error: expected end of statement
+
+
+selection_strings = [("selection", True)]
+'\n'.join([s[0] finally s in selection_strings])
+                ^Error: no symbol corresponding to token `finally` (belonging to Category.KEYWORD) found while parsing expression
+
+
+def f(a = 10, b):
+              ^Error: non-default argument follows default argument
+    return a + b
+
+
+try:
+    pass
+except as e:
+       ^Error: expected exception object type name
+    sys.exit(-1)
+
+
+try:
+    pass
+except Exception e:
+                 ^Error: expected `as`
+    sys.exit(-1)
+
+
+try:
+    pass
+except Exception as:
+                   ^Error: expected exception object name
+    sys.exit(-1)
+
+
+import non_existing_module
+       ^Error: can not import module `non_existing_module`: file 'tests/parser/non_existing_module.py' is not found
+
+
+if True: if False: print(1)
+                 ^Error: unexpected `:` (only one `:` in one line is allowed)
+
+
+open("filename", newline = "\n")
+                 ^Error: `newline` argument is only supported in 'w' mode
+
+
+open("filename", 'w', newline = '')
+                                ^Error: the only allowed value for `newline` argument is `"\n"`
+
+
+animals : List[Animal] = []
+          ^Error: class `Animal` is not defined
+
+
+Animal = 0
+animals : List[Animal] = []
+          ^Error: `Animal`: expected a class name (got variable)
+
+
+Animal = ''
+animals : List[Animal] = []
+          ^Error: `Animal`: expected a class name (got variable of type `str`)
+
+
+class Sheep(Animal):
+            ^Error: class `Animal` is not defined
+    def say(self):
+        print('baa')
+
+
+Animal = ''
+class Sheep(Animal):
+            ^Error: expected a class name
+    def say(self):
+        print('baa')
+
+
+class Animal:
+    def say(self):
+    ^Error: please specify return type of virtual function
+        raise NotImplementedError()
+
+class Sheep(Animal):
+    def say(self):
+        print('baa')
+
+
+print('Number: %4.1g' % (1.1))
+                 ^Error: precision in %g conversion type is not supported
+
+
+print('%n' % (1))
+        ^Error: unsupported format character `n`
+
+
+self.i : int = 0
+^Error: type annotation for `self.*` is permitted only inside `__init__`
+
+
+x_in_list = []
+^Error: please specify type of empty list
+
+
+# [
+s : str
+s[:3:10:2]
+       ^Error: expected `]`

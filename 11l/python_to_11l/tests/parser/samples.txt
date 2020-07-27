@@ -1,0 +1,692 @@
+def sum(x, y):
+    r = x + y
+    return r
+===
+F sum(x, y)
+   V r = x + y
+   R r
+
+
+message : str
+pos : int = 0
+type_args : List[str]
+t : Tuple[str, int]
+===
+String message
+Int pos = 0
+[String] type_args
+(String, Int) t
+
+
+# Test for some class based on class Exception
+class MyException(Exception):
+    message : str
+    line : int
+    column : int
+    pos : int
+
+    def __init__(self, message, line, column, pos):
+        self.message = message
+        self.line = line
+        self.column = column
+        self.pos = pos
+===
+T MyException
+   String message
+   Int line
+   Int column
+   Int pos
+
+   F (message, line, column, pos)
+      .message = message
+      .line = line
+      .column = column
+      .pos = pos
+
+
+# Test for some class which is not based on other one
+class Person:
+    name : str
+    age : int
+
+    def __init__(name, age):
+        self.name = name
+        self.age  = age
+===
+T Person
+   String name
+   Int age
+
+   F (name, age)
+      .name = name
+      .age = age
+
+
+# Test for some class based on non Exception class
+class Shape:
+    position : Tuple[int, int]
+
+class Circle(Shape):
+    radious : int
+===
+T Shape
+   (Int, Int) position
+
+T Circle(Shape)
+   Int radious
+
+
+class Converter:
+    def to_html(self, instr):
+        def get_newline_chars():
+            newline_chars : List[int] = []
+            i = 0
+            while i < len(instr):
+                if instr[i] == "\r" or (instr[i] == "\n" and instr[i - 1:i] != "\r"):
+                    newline_chars += [i]
+                i += 1
+            return newline_chars
+===
+T Converter
+   F to_html(instr)
+      F get_newline_chars()
+         [Int] newline_chars
+         V i = 0
+         L i < @instr.len
+            I @instr[i] == "\r" | (@instr[i] == "\n" & @instr[i - 1 .< i] != "\r")
+               newline_chars [+]= i
+            i++
+         R newline_chars
+
+
+---
+===
+F to_html(instr)
+   F get_newline_chars()
+      V i = 0
+      L i < @instr.len
+         I @instr[i] == "\r" | (@instr[i] == "\n" & @instr[i - 1 .< i] != "\r")
+            R [+]= i
+         i++
+
+
+arr : List[int] = []
+arr += [1, 2]
+===
+[Int] arr
+arr [+]= [1, 2]
+
+
+(1,)
+===
+(1,)
+
+
+indentation_levels : List[int]
+prev_indentation_level = indentation_levels[-1] if len(indentation_levels) else 0
+if len(indentation_levels):
+    prev_indentation_level = indentation_levels[-1]
+else:
+    prev_indentation_level = 0
+def f(): # test for error when instead of `s = self \n while not s.is_function:` was `s = self.parent \n while s is not None and not s.is_function:`
+    prev_indentation_level = 0
+class ASTNodeWithChildren:
+    def children_to_str_detect_single_stmt(self, indent, r):
+        if len(self.children) > 1 or len(self.children) == 0:
+            return self.children_to_str(indent, r)
+[1, 2]
+===
+[Int] indentation_levels
+V prev_indentation_level = I !indentation_levels.empty {indentation_levels.last} E 0
+I !indentation_levels.empty
+   prev_indentation_level = indentation_levels.last
+E
+   prev_indentation_level = 0
+F f()
+   V prev_indentation_level = 0
+T ASTNodeWithChildren
+   F children_to_str_detect_single_stmt(indent, r)
+      I .children.len > 1 | .children.empty
+         R .children_to_str(indent, r)
+[1, 2]
+
+
+def sign(x):
+    if x < 0:
+        return -1
+    elif x > 0:
+        return 1
+    else:
+        return 0
+===
+F sign(x)
+   I x < 0
+      R -1
+   E I x > 0
+      R 1
+   E
+      R 0
+
+
+---
+key : str
+if token.category in (Token.Category.NUMERIC_LITERAL, Token.Category.STRING_LITERAL):
+    key = '(literal)'
+elif token.category == Token.Category.NAME:
+    key = '(name)'
+elif token.category == Token.Category.CONSTANT:
+    key = '(constant)'
+elif token.category in (Token.Category.STATEMENT_SEPARATOR, Token.Category.DEDENT):
+    key = ';'
+else:
+    key = token.value(source)
+===
+String key = S token.category
+   NUMERIC_LITERAL, STRING_LITERAL
+      ‘(literal)’
+   NAME
+      ‘(name)’
+   CONSTANT
+      ‘(constant)’
+   STATEMENT_SEPARATOR, DEDENT
+      ‘;’
+   E
+      token.value(source)
+
+
+def exit_with_error(message, pos):
+    pass
+def find_ending_sq_bracket(str, i, start = 0):
+    starti = i
+    assert(str[i] == "[") # ]
+    nesting_level = 0
+    while True:
+        ch = str[i]
+        if ch == "[":
+            nesting_level += 1
+        elif ch == "]":
+            nesting_level -= 1
+            if nesting_level == 0:
+                return i
+        i += 1
+        if i == len(str):
+            exit_with_error('Unended comment started', start + starti)
+===
+F exit_with_error(message, pos)
+{
+}
+F find_ending_sq_bracket(str, =i, start = 0)
+   V starti = i
+   assert(str[i] == ‘[’)
+   V nesting_level = 0
+   L
+      S str[i]
+         ‘[’
+            nesting_level++
+         ‘]’
+            I --nesting_level == 0
+               R i
+      i++
+      I i == str.len
+         exit_with_error(‘Unended comment started’, start + starti)
+
+
+---
+// balancing ]
+
+
+s : str
+s[-2]
+s[:-1]
+s[1:]
+#s[:1:] # this does not make any sense — please write `s[:1]` instead
+s[:2]
+s[1:2]
+s[::2]
+s[1::2]
+s[3:10:2]
+s[:10:2]
+#s[3:10:] # this does not make any sense — please write `s[3:10]` instead
+===
+String s
+s[(len)-2]
+s[0 .< (len)-1]
+s[1..]
+s[0.<2]
+s[1.<2]
+s[(0..).step(2)]
+s[(1..).step(2)]
+s[(3.<10).step(2)]
+s[(0.<10).step(2)]
+
+
+class ASTAssignmentWithTypeHint:
+    def to_str(self, indent):
+        return super().to_str(indent)[:-1] + ' = ' + self.expression.to_str() + "\n"
+===
+T ASTAssignmentWithTypeHint
+   F to_str(indent)
+      R T.base.to_str(indent)[0 .< (len)-1]‘ = ’(.expression.to_str())"\n"
+
+
+def html_escapeq(str):
+    return str.replace('&', '&amp;').replace('"', '&quot;')
+link = 'http://...'
+tag : str = '<a href="' + link + '"' # while type inference is not supported, type hint is necessary to convert from `+=` to `‘’=`
+tag += html_escapeq()
+===
+F html_escapeq(str)
+   R str.replace(‘&’, ‘&amp;’).replace(‘"’, ‘&quot;’)
+V link = ‘http://...’
+String tag = ‘<a href="’link‘"’
+tag ‘’= html_escapeq()
+
+
+str1 = '1'
+str2 = '2'
+# s = str1 + str2 # this is rarely needed {and, for example, `if c1 + c2 == "/\\"` can be rewritten as `if (c1, c2) == ('/', "\\")`, which is more efficient}, so write this:
+s = str1 + '' + str2
+===
+V str1 = ‘1’
+V str2 = ‘2’
+V s = str1‘’str2
+
+
+a : bool
+b : bool
+c : bool
+if (a and b) or c:
+    if a and (b or c):
+        return
+class ASTIf:
+    pass
+if (self.parent is None and isinstance(self.ast_parent, ASTIf)) or (self.parent is not None and self.parent.symbol.id == 'if'):
+    return
+===
+Bool a
+Bool b
+Bool c
+I (a & b) | c
+   I a & (b | c)
+      R
+T ASTIf
+{
+}
+I (.parent == N & T(.ast_parent) >= ASTIf) | (.parent != N & .parent.symbol.id == ‘if’)
+   R
+
+
+l = lambda: None
+l = lambda x: x[0]
+l = lambda self: self # `self` here should not be replaced with ``
+l = lambda x, y, reverse = False: y < x if reverse else x < y
+if True:
+    c = 1
+    l = lambda x: x < c
+c = 1
+l = lambda x: x < c
+===
+V l = () -> N
+l = x -> x[0]
+l = self -> self
+l = (x, y, reverse = 0B) -> I reverse {y < x} E x < y
+I 1B
+   V c = 1
+   l = x -> x < @c
+V c = 1
+l = x -> x < :c
+
+
+class Object:
+    pass
+
+def f():
+    pass
+===
+T Object
+{
+}
+
+F f()
+{
+}
+
+
+1 in 2
+1 not in 2
+===
+1 C 2
+1 !C 2
+
+
+a : str
+b : str
+a is b
+a is not b
+===
+String a
+String b
+&a == &b
+&a != &b
+
+
+source : str
+def prev_char():
+   return "\0"
+tag = {'*':'b', '_':'u', '-':'s', '~':'i'}[prev_char()]
+return {'None': 'N', 'False': '0B', 'True': '1B'}[self.token.value(source)]
+python_types_to_11l = {'int':'Int', 'str':'String', 'List':'Array', 'Tuple':'Tuple'}
+return self.children[0].to_str() + ' ' + {'and':'&', 'or':'|', 'in':'C'}.get(self.symbol.id, 'symbol-' + self.symbol.id) + ' ' + self.children[1].to_str()
+===
+String source
+F prev_char()
+   R "\0"
+V tag = S prev_char() {‘*’ {‘b’}; ‘_’ {‘u’}; ‘-’ {‘s’}; ‘~’ {‘i’}}
+R S .token.value(source) {‘None’ {‘N’}; ‘False’ {‘0B’}; ‘True’ {‘1B’}}
+V python_types_to_11l = [‘int’ = ‘Int’, ‘str’ = ‘String’, ‘List’ = ‘Array’, ‘Tuple’ = ‘Tuple’]
+R .children[0].to_str()‘ ’(S .symbol.id {‘and’ {‘&’}; ‘or’ {‘|’}; ‘in’ {‘C’} E ‘symbol-’(.symbol.id)})‘ ’(.children[1].to_str())
+
+
+x : bool
+y : bool
+ins : str
+return not x == y # operator `==` in Python has higher precedence than `not` (in 11l it's precedence is lower)
+return not x or y # operators `or` and `and` in Python have lower precedence than `not`
+return not "\n" in ins
+return not x
+return not (x)
+===
+Bool x
+Bool y
+String ins
+R !(x == y)
+R !x | y
+R !("\n" C ins)
+R !x
+R !(x)
+
+
+class Converter:
+    def to_html(self, instr, outfile = None):
+        i = 0
+        writepos = 0
+        def write_to_pos(pos, npos):
+            nonlocal writepos
+            outfile.write(instr[writepos:pos])
+            writepos = npos
+            gpos = 1
+            global gpos
+            gpos = 2
+        def write_to_i(add_str, skip_chars = 1):
+            def write():
+                write_to_pos(i, i+skip_chars)
+            write()
+            outfile.write(add_str)
+===
+T Converter
+   F to_html(instr, outfile = N)
+      V i = 0
+      V writepos = 0
+      F write_to_pos(pos, npos)
+         @outfile.write(@instr[@writepos .< pos])
+         @writepos = npos
+         V gpos = 1
+         :gpos = 2
+      F write_to_i(add_str, skip_chars = 1)
+         F write()
+            @@write_to_pos(@@i, @@i + @skip_chars)
+         write()
+         @outfile.write(add_str)
+
+
+token = None
+err_token = None
+err_token if err_token is not None else token
+===
+V token = N
+V err_token = N
+err_token ? token
+
+
+ch : str
+if '0' <= ch <= '9':
+    pass
+if not '0' <= ch <= '9':
+    pass
+if '0' <= ch < '9':
+    if '0' < ch <= '9':
+        if '0' < ch < '9':
+            pass
+===
+String ch
+I ch C ‘0’..‘9’
+{
+}
+I !(ch C ‘0’..‘9’)
+{
+}
+I ch C ‘0’.<‘9’
+   I ch C ‘0’<.‘9’
+      I ch C ‘0’<.<‘9’
+      {
+      }
+
+
+12_345
+0o123_45
+-0x0000FFFF
+0xFF
+0x00FFFF
+0b10101010
+-0b10101010
+1.234_5e20
+===
+12'345
+123'45o
+-0000'FFFF
+00'FF
+0000'FFFF
+10101010b
+-10101010b
+1.234'5e20
+
+
+n = '123'
+number_with_separators = ''
+j = len(n)
+while j > 4:
+    number_with_separators = "'" + n[j-4:j] + number_with_separators
+    j -= 4
+===
+V n = ‘123’
+V number_with_separators = ‘’
+V j = n.len
+L j > 4
+   number_with_separators = ‘'’n[j - 4 .< j]‘’number_with_separators
+   j -= 4
+
+
+def roman(n):
+    pass
+
+if __name__ == '__main__':
+    assert roman(6) == 'VI', '6'
+    print("Earn cool rewards by using the 'Check' button!")
+===
+F roman(n)
+{
+}
+
+:start:
+assert(roman(6) == ‘VI’, ‘6’)
+print(‘Earn cool rewards by using the 'Check' button!’)
+
+
+
+arr : List[str] = []
+', '.join(arr)
+===
+[String] arr
+arr.join(‘, ’)
+
+
+indent = 0
+# [https://sourceforge.net/u/t-a-v/11l/python_to_11l/ci/0f3fd6937ae538434f145c81815de8c3ced4dadc/tree/parse.py#l189 <- https://bitbucket.org/11l-lang/python_to_11l/src/0f3fd6937ae538434f145c81815de8c3ced4dadc/parse.py#lines-189]:
+r = self.newlines() + ' ' * (indent*3) + 'F ' + (self.function_name if self.function_name != '__init__' else '') \
+    + '(' + ", ".join(self.function_arguments if len(self.function_arguments) == 0 or self.function_arguments[0] != 'self' else self.function_arguments[1:]) + ")\n"
+===
+V indent = 0
+V r = .newlines()‘’(‘ ’ * (indent * 3))‘F ’(I .function_name != ‘__init__’ {.function_name} E ‘’)‘(’(I .function_arguments.empty | .function_arguments[0] != ‘self’ {.function_arguments} E .function_arguments[1..]).join(‘, ’)")\n"
+
+
+class ASTExpression:
+    def to_str(self, indent):
+        return ' ' * (indent*3) + self.expression.to_str() + "\n"
+===
+T ASTExpression
+   F to_str(indent)
+      R (‘ ’ * (indent * 3))‘’(.expression.to_str())"\n"
+
+
+while True:
+    if True: break
+    a = 0
+===
+L
+   I 1B
+      L.break
+   V a = 0
+
+
+import test_deep_imports
+print()
+===
+//import test_deep_imports
+print()
+
+
+def f1(b : bool, *, pos = 0):
+   pass
+def f2(b : bool, *, pos : int = 0):
+   pass
+===
+F f1(Bool b; ', pos = 0)
+{
+}
+F f2(Bool b, ', Int pos = 0)
+{
+}
+
+
+def newtoncooling(time, temp): return -0.07 * (temp - 20)
+===
+F newtoncooling(time, temp)
+   R -0.07 * (temp - 20)
+
+
+def assign(values, s, d):
+    "Eliminate all the other values (except d) from values[s] and propagate."
+    global eliminate
+    if all([eliminate(values, s, d2) for d2 in values[s] if d2 != d]):
+        return values
+    else:
+        return None
+
+def eliminate(values, s, d):
+    "Eliminate d from values[s]; propagate when values or places <= 2."
+    if d not in values[s]:
+        return values ## Already eliminated
+===
+F assign(values, s, d)
+   ‘Eliminate all the other values (except d) from values[s] and propagate.’
+   I all(values[s].filter(d2 -> d2 != @d).map(d2 -> eliminate(@values, @s, d2)))
+      R values
+   E
+      R N
+
+F eliminate(values, s, d)
+   ‘Eliminate d from values[s]; propagate when values or places <= 2.’
+   I d !C values[s]
+      R values
+
+
+a : Tuple[int, int]
+b : Tuple[Tuple[int, int], int]
+c : Tuple[Tuple[int, Tuple[int, int]], int]
+scorelist : List[Tuple[float, Tuple[int, int]]] = []
+===
+(Int, Int) a
+((Int, Int), Int) b
+((Int, (Int, Int)), Int) c
+[(Float, (Int, Int))] scorelist
+
+
+AB = 1
+CD = 2
+def f(i):
+    print(AB)
+    if i == AB:
+        return 1
+    elif i == CD:
+        return 2
+===
+V AB = 1
+V CD = 2
+F f(i)
+   print(:AB)
+   I i == :AB
+      R 1
+   E I i == :CD
+      R 2
+
+
+import random, math
+
+class Individual:
+    def __init__(self):
+        self.genome = [random.random() for i in range(10)]
+    def computeValuesGenome(self, xMin=0, xMax=math.pi):
+        pass
+===
+//import random, math
+
+T Individual
+   genome = (0.<10).map(i -> random:())
+   F ()
+   {
+   }
+   F computeValuesGenome(xMin = 0, xMax = math:pi)
+   {
+   }
+
+
+'%4f' % (1.5)
+'%8f' % (1.5)
+'%9f' % (1.5)
+'%9.5f' % (1.5)
+'%4.0f' % (1.5)
+'%2.f' % (1.5)
+===
+‘#.6’.format(1.5)
+‘#.6’.format(1.5)
+‘#2.6’.format(1.5)
+‘#3.5’.format(1.5)
+‘#4.0’.format(1.5)
+‘#2.0’.format(1.5)
+
+
+dates : List[datetime.date] = []
+times : List[datetime.datetime] = []
+===
+[Time] dates
+[Time] times
+
+
+for i in range(700_000):
+    pass
+print(range(1, 1_000))
+===
+L(i) 700'000
+{
+}
+print(1..999)

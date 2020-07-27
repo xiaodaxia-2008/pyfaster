@@ -1,0 +1,21 @@
+Imported modules = []
+keywords
+    type = List
+    node = N
+operators
+    type = List
+    node = N
+delimiters
+    type = List
+    node = N
+operators_and_delimiters
+    type = ‘’
+    node = N
+tokenize
+    type = ‘’
+    node
+        function_arguments = [
+            ‘source; ; ’
+            newline_chars; N; List[int]
+            comments; N; List[Tuple[int, int]]
+        ]

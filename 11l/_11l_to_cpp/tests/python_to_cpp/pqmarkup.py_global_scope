@@ -1,0 +1,14 @@
+Imported modules = [
+    syntax_highlighter_for_pqmarkup
+    python_to_11l.tokenizer
+    _11l_to_cpp.tokenizer
+]
+to_html
+    type = ‘’
+    node
+        function_arguments = [
+            ‘instr; ; ’
+            outfilef; N; IO[str]
+            ‘ohd; 0B; ’
+            ‘habr_html; 0B; ’
+        ]

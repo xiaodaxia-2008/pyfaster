@@ -1,0 +1,12 @@
+fn f()
+    \‘docstring for function f()’
+    \(( some commented code
+    ... // :)(:
+    ))
+    if .habr_html                                         // dirty hack
+        r = r.replace("</blockquote>\n", ‘</blockquote>’) \\ (just left it as is)
+===
+(11, 40)
+(45, 91)
+(150, 163)
+(222, 245)

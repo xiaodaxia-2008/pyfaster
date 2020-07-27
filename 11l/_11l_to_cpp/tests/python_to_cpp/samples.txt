@@ -1,0 +1,2225 @@
+def parse_int(s):
+    i = 0
+    r = 0
+    while i < len(s) and '0' <= s[i] <= '9':
+        r = r*10 + ord(s[i]) - ord('0')
+        i += 1
+    return r
+===
+F parse_int(s)
+   V i = 0
+   V r = 0
+   L i < s.len & s[i] C ‘0’..‘9’
+      r = r * 10 + s[i].code - ‘0’.code
+      i++
+   R r
+===
+template <typename T1> auto parse_int(const T1 &s)
+{
+    auto i = 0;
+    auto r = 0;
+    while (i < s.len() && in(s[i], range_ee(u'0'_C, u'9'_C))) {
+        r = r * 10 + s[i].code - u'0'_C.code;
+        i++;
+    }
+    return r;
+}
+
+
+class Object:
+    a : int
+    b : int
+    def __init__(self, a = 1, b = 2):
+        self.a = a
+        self.b = b
+object = Object(b = 3)
+===
+T Object
+   Int a
+   Int b
+   F (a = 1, b = 2)
+      .a = a
+      .b = b
+V object = Object(b' 3)
+===
+class Object
+{
+public:
+    int a;
+    int b;
+    template <typename T1 = decltype(1), typename T2 = decltype(2)> Object(const T1 &a = 1, const T2 &b = 2) :
+        a(a),
+        b(b)
+    {
+    }
+};
+auto object = Object(1, 3);
+
+
+def print_seconds(sec):
+    r60 = sec % 60
+    print(chr(ord('0') + r60 // 10) + ''
+        + chr(ord('0') + r60 %  10))
+===
+F print_seconds(sec)
+   V r60 = sec % 60
+   print(Char(code' ‘0’.code + r60 I/ 10)‘’Char(code' ‘0’.code + r60 % 10))
+===
+template <typename T1> auto print_seconds(const T1 &sec)
+{
+    auto r60 = mod(sec, 60);
+    print(Char(u'0'_C.code + idiv(r60, 10)) + Char(u'0'_C.code + mod(r60, 10)));
+}
+
+
+print("Prepare files' list...", end = '')
+print("Prepare files' list...", flush = True)
+===
+print(‘Prepare files' list...’, end' ‘’)
+print(‘Prepare files' list...’, flush' 1B)
+===
+struct CodeBlock1
+{
+    CodeBlock1()
+    {
+        print(u"Prepare files' list..."_S, u""_S);
+        print(u"Prepare files' list..."_S, u"\n"_S, true);
+    }
+} code_block_1;
+
+
+def f(a = 1, b = 2):
+    return a + b
+print(f(b = 3))
+print(f(0, b = 3))
+def f2(a = 1, b = 2, c = 3):
+    return a + b + c
+print(f2(b = 3, c = 4))
+===
+F f(a = 1, b = 2)
+   R a + b
+print(f(b' 3))
+print(f(0, b' 3))
+F f2(a = 1, b = 2, c = 3)
+   R a + b + c
+print(f2(b' 3, c' 4))
+===
+template <typename T1 = decltype(1), typename T2 = decltype(2)> auto f(const T1 &a = 1, const T2 &b = 2)
+{
+    return a + b;
+}
+
+struct CodeBlock1
+{
+    CodeBlock1()
+    {
+        print(f(1, 3));
+        print(f(0, 3));
+    }
+} code_block_1;
+template <typename T1 = decltype(1), typename T2 = decltype(2), typename T3 = decltype(3)> auto f2(const T1 &a = 1, const T2 &b = 2, const T3 &c = 3)
+{
+    return a + b + c;
+}
+
+struct CodeBlock2
+{
+    CodeBlock2()
+    {
+        print(f2(1, 3, 4));
+    }
+} code_block_2;
+
+
+def f(a = 10, *, b, c = 20):
+    return a + b + c
+f(b = 1)
+===
+F f(a = 10, ', b, c = 20)
+   R a + b + c
+f(b' 1)
+===
+template <typename T1, typename T2, typename T3 = decltype(20)> auto f(const T1 &a, const T2 &b, const T3 &c = 20)
+{
+    return a + b + c;
+}
+
+struct CodeBlock1
+{
+    CodeBlock1()
+    {
+        f(10, 1);
+    }
+} code_block_1;
+
+
+def f():
+    for i in range(0, 11, 2):
+        print(i)
+    for i in range(11):
+        print(i)
+===
+F f()
+   L(i) (0.<11).step(2)
+      print(i)
+   L(i) 11
+      print(i)
+===
+auto f()
+{
+    for (auto i : range_el(0, 11).step(2))
+        print(i);
+    for (int i = 0; i < 11; i++)
+        print(i);
+}
+
+
+def f():
+    dict : Dict[str, int] = {}
+    dict['key'] = 1
+    assert('key' in dict)
+    arr : List[int] = []
+    arr += [10]
+===
+F f()
+   Dict[String, Int] dict
+   dict[‘key’] = 1
+   assert(‘key’ C dict)
+   [Int] arr
+   arr [+]= 10
+===
+auto f()
+{
+    Dict<String, int> dict;
+    dict.set(u"key"_S, 1);
+    assert(in(u"key"_S, dict));
+    Array<int> arr;
+    arr.append(10);
+}
+
+
+R"\""
+R"""\""""
+R"a\\"
+R"""a\\"""
+r'''\''''
+r'''a
+b'''
+r'''ab'''
+r'''a\b''' # (((((((((
+r'''a\)"b'''
+r'''a\)"b)'"c'''
+'''\
+<html>"'''
+"""\
+<html>'"""
+'''\
+<html>
+<head>'''
+'''a'''
+"\n"
+"'"
+'"'
+"‘"
+"’"
+"don‘t"
+r"don‘t"
+"don’‘t"
+"don’t"
+r"don’t"
+'\''
+"\""
+===
+‘\"’
+‘\"’
+‘a\\’
+‘a\\’
+‘\'’
+‘a
+b’
+‘ab’
+‘a\b’
+‘a\)"b’
+‘a\)"b)'"c’
+"\
+<html>\""
+"\
+<html>'"
+"\
+<html>\n\
+<head>"
+‘a’
+"\n"
+‘'’
+‘"’
+"‘"
+"’"
+"don‘t"
+‘don‘t’’'
+'‘‘don’‘t’’'
+"don’t"
+'‘‘don’t’
+"'"
+"\""
+===
+struct CodeBlock1
+{
+    CodeBlock1()
+    {
+        uR"(\")"_S;
+        uR"(\")"_S;
+        uR"(a\\)"_S;
+        uR"(a\\)"_S;
+        uR"(\')"_S;
+        uR"(a
+b)"_S;
+        u"ab"_S;
+        uR"(a\b)"_S;
+        uR"'(a\)"b)'"_S;
+        uR"''(a\)"b)'"c)''"_S;
+        u"\
+<html>\""_S;
+        u"\
+<html>'"_S;
+        u"\
+<html>\n\
+<head>"_S;
+        u"a"_S;
+        u"\n"_S;
+        u"'"_S;
+        u"\""_S;
+        u"‘"_S;
+        u"’"_S;
+        u"don‘t"_S;
+        u"don‘t"_S;
+        u"don’‘t"_S;
+        u"don’t"_S;
+        u"don’t"_S;
+        u"'"_S;
+        u"\""_S;
+    }
+} code_block_1;
+
+
+x = ~1 ^ 2
+===
+V x = (-)1 (+) 2
+===
+auto x = ~1 ^ 2;
+
+
+if __name__ == '__main__':
+    f : Callable[[str, int], str]
+    def ff(s, i):
+        return s * i
+    f = ff
+    assert(f('s', 2) == 'ss')
+===
+:start:
+(String, Int -> String) f
+F ff(s, i)
+   R s * i
+f = ff
+assert(f(‘s’, 2) == ‘ss’)
+===
+int main()
+{
+    std::function<String(const String&, const int)> f;
+    auto ff = [](const auto &s, const auto &i)
+    {
+        return s * i;
+    };
+    f = ff;
+    assert(f(u"s"_S, 2) == u"ss");
+}
+
+
+def find_ending_pair_quote(instr, i):
+    nesting_level = 0
+    while True:
+        ch = instr[i]
+        if ch == "‘":
+            nesting_level += 1
+        elif ch == "’":
+            nesting_level -= 1
+            if nesting_level == 0:
+                return i
+        else:
+            return -1
+        i += 1
+===
+F find_ending_pair_quote(instr, =i)
+   V nesting_level = 0
+   L
+      S instr[i]
+         "‘"
+            nesting_level++
+         "’"
+            I --nesting_level == 0
+               R i
+         E
+            R -1
+      i++
+===
+template <typename T1, typename T2> auto find_ending_pair_quote(const T1 &instr, T2 i)
+{
+    auto nesting_level = 0;
+    while (true) {
+        switch (instr[i])
+        {
+        case u'‘':
+            nesting_level++;
+            break;
+        case u'’':
+            if (--nesting_level == 0)
+                return i;
+            break;
+        default:
+            return -1;
+            break;
+        }
+        i++;
+    }
+}
+
+
+def exit_with_error(message, pos):
+    pass
+def write_http_link(instr, i, endpos, q_offset = 1):
+    nesting_level = 0
+    i += 2
+    while True:
+        if i == len(instr):
+            exit_with_error('Unended link', endpos+q_offset)
+        ch = instr[i]
+        if ch == "[":
+            nesting_level += 1
+        elif ch == "]":
+            if nesting_level == 0:
+                break
+            nesting_level -= 1
+        elif ch == " ":
+            break
+        i += 1
+===
+F exit_with_error(message, pos)
+{
+}
+F write_http_link(instr, =i, endpos, q_offset = 1)
+   V nesting_level = 0
+   i += 2
+   L
+      I i == instr.len
+         exit_with_error(‘Unended link’, endpos + q_offset)
+      S instr[i]
+         ‘[’
+            nesting_level++
+         ‘]’
+            I nesting_level == 0
+               L.break
+            nesting_level--
+         ‘ ’
+            L.break
+      i++
+===
+template <typename T1, typename T2> auto exit_with_error(const T1 &message, const T2 &pos)
+{
+}
+
+template <typename T1, typename T2, typename T3, typename T4 = decltype(1)> auto write_http_link(const T1 &instr, T2 i, const T3 &endpos, const T4 &q_offset = 1)
+{
+    auto nesting_level = 0;
+    i += 2;
+    while (true) {
+        if (i == instr.len())
+            exit_with_error(u"Unended link"_S, endpos + q_offset);
+        switch (instr[i])
+        {
+        case u'[':
+            nesting_level++;
+            break;
+        case u']':
+            if (nesting_level == 0)
+                goto break_;
+            nesting_level--;
+            break;
+        case u' ':
+            goto break_;
+            break;
+        }
+        i++;
+    }
+    break_:;
+}
+
+
+import os, tempfile
+
+print(os.pathsep + os.path.join(tempfile.gettempdir(), 'right'))
+print(os.getenv('PATH'))
+os.environ['PATH'] += os.pathsep + 'KDiff3'
+print(os.getenv('PATH'))
+print(os.listdir())
+os.system('pause')
+===
+//import os, tempfile
+print(os:env_path_sep‘’fs:path:join(fs:get_temp_dir(), ‘right’))
+print(os:getenv(‘PATH’))
+os:environ[‘PATH’] += os:env_path_sep‘KDiff3’
+print(os:getenv(‘PATH’))
+print(fs:list_dir())
+os:(‘pause’)
+===
+struct CodeBlock1
+{
+    CodeBlock1()
+    {
+        print(os::env_path_sep + fs::path::join(fs::get_temp_dir(), u"right"_S));
+        print(os::getenv(u"PATH"_S));
+        os::environ[u"PATH"_S] += os::env_path_sep + u"KDiff3"_S;
+        print(os::getenv(u"PATH"_S));
+        print(fs::list_dir());
+        os::_(u"pause"_S);
+    }
+} code_block_1;
+
+
+import os
+
+def process_files(exclude_dir):
+    for root, dirs, files in os.walk('.'):
+        dirs[:] = [d for d in dirs if d[0] != '.' and d != exclude_dir] # exclude hidden folders (e.g. `.hg`)
+        for name in files:
+            print(os.path.join(root, name))
+
+def process_files2():
+    for root, dirs, files in os.walk('.'):
+        for name in files:
+            print(os.path.join(root, name))
+===
+//import os
+
+F process_files(exclude_dir)
+   L(_fname) fs:walk_dir(‘.’, dir_filter' d -> d[0] != ‘.’ & d != @exclude_dir, files_only' 0B)
+      V root = fs:path:dir_name(_fname)
+      [String] dirs, files
+      I fs:is_dir(_fname) {dirs [+]= fs:path:base_name(_fname)} E files [+]= fs:path:base_name(_fname)
+      L(name) files
+         print(fs:path:join(root, name))
+
+F process_files2()
+   L(_fname) fs:walk_dir(‘.’, files_only' 0B)
+      V root = fs:path:dir_name(_fname)
+      [String] dirs, files
+      I fs:is_dir(_fname) {dirs [+]= fs:path:base_name(_fname)} E files [+]= fs:path:base_name(_fname)
+      L(name) files
+         print(fs:path:join(root, name))
+===
+template <typename T1> auto process_files(const T1 &exclude_dir)
+{
+    for (auto &&_fname : fs::walk_dir(u"."_S, [&exclude_dir](const auto &d){return _get<0>(d) != u'.' && d != exclude_dir;}, false)) {
+        auto root = fs::path::dir_name(_fname);
+        Array<String> dirs, files;
+        if (fs::is_dir(_fname))
+            dirs.append(fs::path::base_name(_fname));
+        else
+            files.append(fs::path::base_name(_fname));
+        for (auto &&name : files)
+            print(fs::path::join(root, name));
+    }
+}
+
+auto process_files2()
+{
+    for (auto &&_fname : fs::walk_dir(u"."_S, nullptr, false)) {
+        auto root = fs::path::dir_name(_fname);
+        Array<String> dirs, files;
+        if (fs::is_dir(_fname))
+            dirs.append(fs::path::base_name(_fname));
+        else
+            files.append(fs::path::base_name(_fname));
+        for (auto &&name : files)
+            print(fs::path::join(root, name));
+    }
+}
+
+
+print(round(1.12345, 3))
+===
+print(round(1.12345, 3))
+===
+struct CodeBlock1
+{
+    CodeBlock1()
+    {
+        print(round(1.12345, 3));
+    }
+} code_block_1;
+
+
+import time
+start = time.perf_counter()
+time.sleep(0.1)
+print(time.perf_counter() - start)
+===
+//import time
+V start = time:perf_counter()
+sleep(0.1)
+print(time:perf_counter() - start)
+===
+auto start = timens::perf_counter();
+
+struct CodeBlock1
+{
+    CodeBlock1()
+    {
+        sleep(0.1);
+        print(timens::perf_counter() - start);
+    }
+} code_block_1;
+
+
+import datetime
+d = datetime.timedelta(days = 1, hours = 2, minutes = 3, seconds = 4.5)
+assert(datetime.datetime(2018, 8, 2) - datetime.datetime(2018, 7, 1) == datetime.timedelta(days = 32))
+assert(datetime.date    (2018, 8, 2) - datetime.date    (2018, 7, 1) == datetime.timedelta(days = 32))
+print(d)
+print(str(d.days) + ', ' + str(d.total_seconds()))
+print(datetime.date.today())
+print(datetime.datetime.now() - datetime.date.today())
+===
+//import datetime
+V d = TimeDelta(days' 1, hours' 2, minutes' 3, seconds' 4.5)
+assert(Time(2018, 8, 2) - Time(2018, 7, 1) == TimeDelta(days' 32))
+assert(Time(2018, 8, 2) - Time(2018, 7, 1) == TimeDelta(days' 32))
+print(d)
+print(String(d.days())‘, ’String(d.seconds))
+print(time:today())
+print(Time() - time:today())
+===
+auto d = TimeDelta(1, 2, 3, 4.5);
+
+struct CodeBlock1
+{
+    CodeBlock1()
+    {
+        assert(Time(2018, 8, 2) - Time(2018, 7, 1) == TimeDelta(32));
+        assert(Time(2018, 8, 2) - Time(2018, 7, 1) == TimeDelta(32));
+        print(d);
+        print(String(d.days()) + u", "_S + String(d.seconds));
+        print(timens::today());
+        print(Time() - timens::today());
+    }
+} code_block_1;
+
+
+import datetime
+print(datetime.datetime(2001, 2, 3, 4, 5, 6).strftime('%Y.%m.%d %H:%M:%S') == '2001.02.03 04:05:06')
+print(datetime.datetime(2001, 2, 3, 4, 5, 6).format('YYYY.MM.DD hh:mm:ss') == '2001.02.03 04:05:06')
+print(datetime.datetime(2001, 2, 3, 4, 5, 6).format('ГГГГ.ММ.ДД чч:мм:сс') == '2001.02.03 04:05:06')
+print(datetime.datetime.strptime('2001.02.03 04:05:06', '%Y.%m.%d %H:%M:%S') == datetime.datetime(2001, 2, 3, 4, 5, 6))
+print(datetime.datetime(1970, 1, 2).timestamp())
+print(datetime.datetime.fromtimestamp(datetime.datetime(1970, 1, 2).timestamp()))
+# [-TODO: Add `time:gmtime()` and `time:timegm()` [<- `calendar.timegm()`] (need good (practical) test cases!)-]
+===
+//import datetime
+print(Time(2001, 2, 3, 4, 5, 6).strftime(‘%Y.%m.%d %H:%M:%S’) == ‘2001.02.03 04:05:06’)
+print(Time(2001, 2, 3, 4, 5, 6).format(‘YYYY.MM.DD hh:mm:ss’) == ‘2001.02.03 04:05:06’)
+print(Time(2001, 2, 3, 4, 5, 6).format(‘ГГГГ.ММ.ДД чч:мм:сс’) == ‘2001.02.03 04:05:06’)
+print(time:strptime(‘2001.02.03 04:05:06’, ‘%Y.%m.%d %H:%M:%S’) == Time(2001, 2, 3, 4, 5, 6))
+print(Time(1970, 1, 2).unix_time())
+print(time:from_unix_time(Time(1970, 1, 2).unix_time()))
+===
+struct CodeBlock1
+{
+    CodeBlock1()
+    {
+        print(Time(2001, 2, 3, 4, 5, 6).strftime(u"%Y.%m.%d %H:%M:%S"_S) == u"2001.02.03 04:05:06");
+        print(Time(2001, 2, 3, 4, 5, 6).format(u"YYYY.MM.DD hh:mm:ss"_S) == u"2001.02.03 04:05:06");
+        print(Time(2001, 2, 3, 4, 5, 6).format(u"ГГГГ.ММ.ДД чч:мм:сс"_S) == u"2001.02.03 04:05:06");
+        print(timens::strptime(u"2001.02.03 04:05:06"_S, u"%Y.%m.%d %H:%M:%S"_S) == Time(2001, 2, 3, 4, 5, 6));
+        print(Time(1970, 1, 2).unix_time());
+        print(timens::from_unix_time(Time(1970, 1, 2).unix_time()));
+    }
+} code_block_1;
+
+
+for line in open('1.py').readlines():
+    print(line)
+===
+L(line) File(‘1.py’).read_lines(1B)
+   print(line)
+===
+struct CodeBlock1
+{
+    CodeBlock1()
+    {
+        for (auto &&line : File(u"1.py"_S).read_lines(true))
+            print(line);
+    }
+} code_block_1;
+
+
+items = ['A', 'B', 'C']
+for index, item in enumerate(items):
+    print(str(index) + '. ' + item)
+for index, item in enumerate(items, 1):
+    print(str(index) + '. ' + item)
+===
+V items = [‘A’, ‘B’, ‘C’]
+L(item) items
+   V index = L.index
+   print(String(index)‘. ’item)
+L(item) items
+   V index = L.index + 1
+   print(String(index)‘. ’item)
+===
+auto items = create_array({u'A'_C, u'B'_C, u'C'_C});
+
+struct CodeBlock1
+{
+    CodeBlock1()
+    {
+        {int Lindex = 0;
+        for (auto &&item : items) {
+            auto index = Lindex;
+            print(String(index) + u". "_S + item);
+            Lindex++;
+        }}
+        {int Lindex = 0;
+        for (auto &&item : items) {
+            auto index = Lindex + 1;
+            print(String(index) + u". "_S + item);
+            Lindex++;
+        }}
+    }
+} code_block_1;
+
+
+from typing import List
+
+class Animal:
+    def say(self) -> None:
+        raise NotImplementedError()
+
+class Sheep(Animal):
+    def say(self):
+        print('baa')
+
+class Cat(Animal):
+    def say(self):
+        print('meow')
+
+animals : List[Animal] = []
+
+def add_animal(animal : Animal):
+    class Animal: # this local class checks for `tid = self.scope+'‘.parent’'.find(arg[2].rstrip('?'))`
+        name : str
+    animals += [animal]
+
+def global_func():
+    def local_func(animal : Animal):
+        animals += [animal]
+
+if __name__ == '__main__':
+    animals += [Sheep()]
+    animals += [Cat()]
+    animal = Sheep()
+    animal.say()
+    animals += [animal]
+    for animal in animals:
+        animal.say()
+===
+
+T Animal
+   F.virtual.abstract say() -> N
+
+T Sheep(Animal)
+   F.virtual.assign say() -> N
+      print(‘baa’)
+
+T Cat(Animal)
+   F.virtual.assign say() -> N
+      print(‘meow’)
+[Animal] animals
+
+F add_animal(Animal animal)
+   T Animal
+      String name
+   :animals [+]= animal
+
+F global_func()
+   F local_func(Animal animal)
+      :animals [+]= animal
+
+:start:
+animals [+]= Sheep()
+animals [+]= Cat()
+V animal = Sheep()
+animal.say()
+animals [+]= animal
+L(animal) animals
+   animal.say()
+===
+class Animal
+{
+public:
+    virtual void say() = 0;
+};
+
+class Sheep : public Animal
+{
+public:
+    virtual void say() override
+    {
+        print(u"baa"_S);
+    }
+};
+
+class Cat : public Animal
+{
+public:
+    virtual void say() override
+    {
+        print(u"meow"_S);
+    }
+};
+Array<std::unique_ptr<Animal>> animals;
+
+auto add_animal(std::unique_ptr<Animal> animal)
+{
+    class Animal
+    {
+    public:
+        String name;
+    };
+    ::animals.append(std::move(animal));
+}
+
+auto global_func()
+{
+    auto local_func = [](std::unique_ptr<Animal> animal)
+    {
+        ::animals.append(std::move(animal));
+    };
+}
+
+int main()
+{
+    animals.append(std::make_unique<Sheep>());
+    animals.append(std::make_unique<Cat>());
+    auto animal = std::make_unique<Sheep>();
+    animal->say();
+    animals.append(std::move(animal));
+    for (auto &&animal : animals)
+        animal->say();
+}
+
+
+class Animal:
+    def say(self) -> None:
+        print('')
+
+class Sheep(Animal):
+    def say(self):
+        print('baa')
+
+class Cat(Animal):
+    def say(self):
+        print('meow')
+===
+T Animal
+   F.virtual.new say() -> N
+      print(‘’)
+
+T Sheep(Animal)
+   F.virtual.override say() -> N
+      print(‘baa’)
+
+T Cat(Animal)
+   F.virtual.override say() -> N
+      print(‘meow’)
+===
+class Animal
+{
+public:
+    virtual void say()
+    {
+        print(u""_S);
+    }
+};
+
+class Sheep : public Animal
+{
+public:
+    virtual void say() override
+    {
+        print(u"baa"_S);
+    }
+};
+
+class Cat : public Animal
+{
+public:
+    virtual void say() override
+    {
+        print(u"meow"_S);
+    }
+};
+
+
+print("\t word \t".rstrip("\t") == "\t word ")
+print("\t word \t".lstrip("\t") ==   " word \t")
+print("\t word \t". strip("\t") ==   " word ")
+print("\t word \t".rstrip("\t ") == "\t word")
+print("\t word \t".lstrip("\t ") ==    "word \t")
+print("\t word \t". strip("\t ") ==    "word")
+===
+print("\t word \t".rtrim("\t") == "\t word ")
+print("\t word \t".ltrim("\t") == " word \t")
+print("\t word \t".trim("\t") == ‘ word ’)
+print("\t word \t".rtrim(Array[Char]("\t ")) == "\t word")
+print("\t word \t".ltrim(Array[Char]("\t ")) == "word \t")
+print("\t word \t".trim(Array[Char]("\t ")) == ‘word’)
+===
+struct CodeBlock1
+{
+    CodeBlock1()
+    {
+        print(u"\t word \t"_S.rtrim(u"\t"_S) == u"\t word ");
+        print(u"\t word \t"_S.ltrim(u"\t"_S) == u" word \t");
+        print(u"\t word \t"_S.trim(u"\t"_S) == u" word ");
+        print(u"\t word \t"_S.rtrim(Array<Char>(u"\t "_S)) == u"\t word");
+        print(u"\t word \t"_S.ltrim(Array<Char>(u"\t "_S)) == u"word \t");
+        print(u"\t word \t"_S.trim(Array<Char>(u"\t "_S)) == u"word");
+    }
+} code_block_1;
+
+
+import math
+
+print(math.ceil(3.6) == 4)
+print(math.floor(3.6) == 3)
+print(math.trunc(-3.6) == -3)
+print(math.fabs(-3.5) == 3.5)
+print(math.exp(2) - 7.38905609893065 + 1)
+print(math.log(math.exp(1)) == 1)
+print(math.log(25, 5) == 2)
+print(math.log2(8) == 3)
+print(math.log10(100) == 2)
+print(math.pow(2, 3) == 2 ** 3)
+print(math.sqrt(4) == 2)
+print(math.acos(0.5) - 0.0471975511965979)
+print(math.asin(1) - 0.5707963267948966)
+print(math.atan(1) - 0.7853981633974483 + 1)
+print(math.atan2(1, 2) - 0.4636476090008061 + 1)
+print(math.cos(1) - 0.5403023058681398 + 1)
+print(math.sin(1) - 0.8414709848078965 + 1)
+print(math.tan(1) - 1.5574077246549023 + 1)
+print(math.degrees(1) - 57.29577951308232 + 1)
+print(math.radians(1) - 0.017453292519943295 + 1)
+print(math.pi - 2.141592653589793)
+print(math.factorial(3))
+===
+//import math
+print(ceil(3.6) == 4)
+print(floor(3.6) == 3)
+print(trunc(-3.6) == -3)
+print(abs(-3.5) == 3.5)
+print(exp(2) - 7.38905609893065 + 1)
+print(log(exp(1)) == 1)
+print(log(25, 5) == 2)
+print(log2(8) == 3)
+print(log10(100) == 2)
+print(pow(2, 3) == 2 ^ 3)
+print(sqrt(4) == 2)
+print(acos(0.5) - 0.0471975511965979)
+print(asin(1) - 0.5707963267948966)
+print(atan(1) - 0.7853981633974483 + 1)
+print(atan2(1, 2) - 0.4636476090008061 + 1)
+print(cos(1) - 0.5403023058681398 + 1)
+print(sin(1) - 0.8414709848078965 + 1)
+print(tan(1) - 1.5574077246549023 + 1)
+print(degrees(1) - 57.29577951308232 + 1)
+print(radians(1) - 0.017453292519943295 + 1)
+print(math:pi - 2.141592653589793)
+print(factorial(3))
+===
+struct CodeBlock1
+{
+    CodeBlock1()
+    {
+        print(ceil(3.6) == 4);
+        print(floor(3.6) == 3);
+        print(trunc(-3.6) == -3);
+        print(abs(-3.5) == 3.5);
+        print(exp(2) - 7.38905609893065 + 1);
+        print(log(exp(1)) == 1);
+        print(log(25, 5) == 2);
+        print(log2(8) == 3);
+        print(log10(100) == 2);
+        print(pow(2, 3) == cube(2));
+        print(sqrt(4) == 2);
+        print(acos(0.5) - 0.0471975511965979);
+        print(asin(1) - 0.5707963267948966);
+        print(atan(1) - 0.7853981633974483 + 1);
+        print(atan2(1, 2) - 0.4636476090008061 + 1);
+        print(cos(1) - 0.5403023058681398 + 1);
+        print(sin(1) - 0.8414709848078965 + 1);
+        print(tan(1) - 1.5574077246549023 + 1);
+        print(degrees(1) - 57.29577951308232 + 1);
+        print(radians(1) - 0.017453292519943295 + 1);
+        print(math::pi - 2.141592653589793);
+        print(factorial(3));
+    }
+} code_block_1;
+
+
+import re
+
+print(re.search('[a-z]', '_12b').start(0) == 3)
+print(re.search('[a-z]', '_12b').end(0) == 4)
+print(re.compile('[a-z]').search('_12b').start(0) == 3)
+print(re.search('([a-z])a', '1a2ba').group(1) == 'b')
+print(re.split(' |:', ' 1 2:3') == ['', '1', '2', '3'])
+print(re.split(' |:', ' 1 2:3 ') == ['', '1', '2', '3', ''])
+print(re.sub(R' \[[^\]]+\]', '', 'Additionally [multi-] select THIS2 [also (e.g. with Ctrl+mouse)].') == 'Additionally select THIS2.')
+print(re.sub(R'(\d)', R'\1\1', '1, 2, 3') == '11, 22, 33')
+print(re.match(R"Additionally select (THIS\d*)$", 'Additionally select THIS2').group(1) == 'THIS2')
+print(re.match('[a-z]([a-z]*)[a-z]', 'abcd').group(1) == 'bc')
+print(re.fullmatch('[a-z]([a-z]*)[a-z]', 'abcd').group(1) == 'bc')
+print(re.findall("[A-Z][1-9]", "B1, C2, D3") == ['B1', 'C2', 'D3'])
+print(re.findall("[A-Z]([1-9])", "B1, C2, D3") == ['1', '2', '3'])
+print([m.start(0) for m in re.finditer("[A-Z]([1-9])", "B1, C2, D3")] == [0, 4, 8])
+===
+//import re
+print(re:‘[a-z]’.search(‘_12b’).start(0) == 3)
+print(re:‘[a-z]’.search(‘_12b’).end(0) == 4)
+print(re:(‘[a-z]’).search(‘_12b’).start(0) == 3)
+print(re:‘([a-z])a’.search(‘1a2ba’).group(1) == ‘b’)
+print(‘ 1 2:3’.split(re:‘ |:’) == [‘’, ‘1’, ‘2’, ‘3’])
+print(‘ 1 2:3 ’.split(re:‘ |:’) == [‘’, ‘1’, ‘2’, ‘3’, ‘’])
+print(‘Additionally [multi-] select THIS2 [also (e.g. with Ctrl+mouse)].’.replace(re:‘ \[[^\]]+\]’, ‘’) == ‘Additionally select THIS2.’)
+print(‘1, 2, 3’.replace(re:‘(\d)’, ‘$1$1’) == ‘11, 22, 33’)
+print(re:‘Additionally select (THIS\d*)’.match(‘Additionally select THIS2’).group(1) == ‘THIS2’)
+print(re:‘^[a-z]([a-z]*)[a-z]’.search(‘abcd’).group(1) == ‘bc’)
+print(re:‘[a-z]([a-z]*)[a-z]’.match(‘abcd’).group(1) == ‘bc’)
+print(re:‘[A-Z][1-9]’.find_strings(‘B1, C2, D3’) == [‘B1’, ‘C2’, ‘D3’])
+print(re:‘[A-Z]([1-9])’.find_strings(‘B1, C2, D3’) == [‘1’, ‘2’, ‘3’])
+print(re:‘[A-Z]([1-9])’.find_matches(‘B1, C2, D3’).map(m -> m.start(0)) == [0, 4, 8])
+===
+struct CodeBlock1
+{
+    CodeBlock1()
+    {
+        print(re::_(u"[a-z]"_S).search(u"_12b"_S).start(0) == 3);
+        print(re::_(u"[a-z]"_S).search(u"_12b"_S).end(0) == 4);
+        print(re::_(u"[a-z]"_S).search(u"_12b"_S).start(0) == 3);
+        print(re::_(u"([a-z])a"_S).search(u"1a2ba"_S).group(1) == u'b');
+        print(u" 1 2:3"_S.split(re::_(u" |:"_S)) == create_array({u""_S, u"1"_S, u"2"_S, u"3"_S}));
+        print(u" 1 2:3 "_S.split(re::_(u" |:"_S)) == create_array({u""_S, u"1"_S, u"2"_S, u"3"_S, u""_S}));
+        print(u"Additionally [multi-] select THIS2 [also (e.g. with Ctrl+mouse)]."_S.replace(re::_(uR"( \[[^\]]+\])"_S), u""_S) == u"Additionally select THIS2.");
+        print(u"1, 2, 3"_S.replace(re::_(uR"((\d))"_S), u"$1$1"_S) == u"11, 22, 33");
+        print(re::_(uR"(Additionally select (THIS\d*))"_S).match(u"Additionally select THIS2"_S).group(1) == u"THIS2");
+        print(re::_(u"^[a-z]([a-z]*)[a-z]"_S).search(u"abcd"_S).group(1) == u"bc");
+        print(re::_(u"[a-z]([a-z]*)[a-z]"_S).match(u"abcd"_S).group(1) == u"bc");
+        print(re::_(u"[A-Z][1-9]"_S).find_strings(u"B1, C2, D3"_S) == create_array({u"B1"_S, u"C2"_S, u"D3"_S}));
+        print(re::_(u"[A-Z]([1-9])"_S).find_strings(u"B1, C2, D3"_S) == create_array({u'1'_C, u'2'_C, u'3'_C}));
+        print(re::_(u"[A-Z]([1-9])"_S).find_matches(u"B1, C2, D3"_S).map([](const auto &m){return m.start(0);}) == create_array({0, 4, 8}));
+    }
+} code_block_1;
+
+
+import os
+os.mkdir('temp_dir')
+os.makedirs('temp_dir/dir1/dir2')
+os.rename('temp_dir', 'temp_dir_')
+===
+//import os
+fs:create_dir(‘temp_dir’)
+fs:create_dirs(‘temp_dir/dir1/dir2’)
+fs:rename(‘temp_dir’, ‘temp_dir_’)
+===
+struct CodeBlock1
+{
+    CodeBlock1()
+    {
+        fs::create_dir(u"temp_dir"_S);
+        fs::create_dirs(u"temp_dir/dir1/dir2"_S);
+        fs::rename(u"temp_dir"_S, u"temp_dir_"_S);
+    }
+} code_block_1;
+
+
+# [http://book.pythontips.com/en/latest/for_-_else.html <- google:‘python else for’ <- https://www.rosettacode.org/wiki/ABC_Problem#Python:_Iterative.2C_with_tests]
+for n in range(2, 10):
+    for x in range(2, n):
+        if n % x == 0:
+            print(str(n) + ' equals ' + str(x) + ' * ' + str(n/x))
+            break
+    else:
+        # loop fell through without finding a factor
+        print(str(n) + ' is a prime number')
+===
+L(n) 2..9
+   L(x) 2 .< n
+      I n % x == 0
+         print(String(n)‘ equals ’String(x)‘ * ’String(n / x))
+         L.break
+      L.was_no_break
+         print(String(n)‘ is a prime number’)
+===
+struct CodeBlock1
+{
+    CodeBlock1()
+    {
+        for (auto n : range_ee(2, 9))
+            {bool was_break = false;
+            for (auto x : range_el(2, n)) {
+                if (mod(n, x) == 0) {
+                    print(String(n) + u" equals "_S + String(x) + u" * "_S + String(n / x));
+                    was_break = true;
+                    break;
+                }
+            }
+            if (!was_break)
+                print(String(n) + u" is a prime number"_S);
+            }
+    }
+} code_block_1;
+
+
+import os
+
+print(os.path.abspath('.'))
+print(os.path.relpath('a/b', 'a/c').replace('\\', '/') == '../b')
+print(os.path.dirname('a/b/c') == 'a/b')
+print(os.path.basename('a/b/c') == 'c')
+open('temp', 'w').write('123')
+print(os.path.getsize('temp') == 3)
+print(os.path.isfile('temp'))
+print(not os.path.isdir('temp'))
+print(not os.path.islink('temp'))
+os.remove('temp')
+os.rmdir('temp')
+print(os.path.join('a/b', 'c').replace('\\', '/') == 'a/b/c')
+print(os.path.pathsep == os.pathsep)
+print(os.path.pathsep in (':', ';'))
+print(os.path.sep == os.sep)
+print(os.path.sep in ('/', '\\'))
+print(os.path.splitext('a/b/c.txt') == ('a/b/c', '.txt'))
+print(os.path.splitext('c.txt') == ('c', '.txt'))
+print(os.path.splitext('a/b.c/d') == ('a/b.c/d', ''))
+===
+//import os
+print(fs:path:absolute(‘.’))
+print(fs:path:relative(‘a/b’, ‘a/c’).replace(‘\’, ‘/’) == ‘../b’)
+print(fs:path:dir_name(‘a/b/c’) == ‘a/b’)
+print(fs:path:base_name(‘a/b/c’) == ‘c’)
+File(‘temp’, ‘w’).write(‘123’)
+print(fs:file_size(‘temp’) == 3)
+print(fs:is_file(‘temp’))
+print(!fs:is_dir(‘temp’))
+print(!fs:is_symlink(‘temp’))
+fs:remove_file(‘temp’)
+fs:remove_dir(‘temp’)
+print(fs:path:join(‘a/b’, ‘c’).replace(‘\’, ‘/’) == ‘a/b/c’)
+print(os:env_path_sep == os:env_path_sep)
+print(os:env_path_sep C (‘:’, ‘;’))
+print(fs:path:sep == fs:path:sep)
+print(fs:path:sep C (‘/’, ‘\’))
+print(fs:path:split_ext(‘a/b/c.txt’) == (‘a/b/c’, ‘.txt’))
+print(fs:path:split_ext(‘c.txt’) == (‘c’, ‘.txt’))
+print(fs:path:split_ext(‘a/b.c/d’) == (‘a/b.c/d’, ‘’))
+===
+struct CodeBlock1
+{
+    CodeBlock1()
+    {
+        print(fs::path::absolute(u"."_S));
+        print(fs::path::relative(u"a/b"_S, u"a/c"_S).replace(uR"(\)"_S, u"/"_S) == u"../b");
+        print(fs::path::dir_name(u"a/b/c"_S) == u"a/b");
+        print(fs::path::base_name(u"a/b/c"_S) == u'c');
+        File(u"temp"_S, u"w"_S).write(u"123"_S);
+        print(fs::file_size(u"temp"_S) == 3);
+        print(fs::is_file(u"temp"_S));
+        print(!fs::is_dir(u"temp"_S));
+        print(!fs::is_symlink(u"temp"_S));
+        fs::remove_file(u"temp"_S);
+        fs::remove_dir(u"temp"_S);
+        print(fs::path::join(u"a/b"_S, u"c"_S).replace(uR"(\)"_S, u"/"_S) == u"a/b/c");
+        print(os::env_path_sep == os::env_path_sep);
+        print(in(os::env_path_sep, make_tuple(u":"_S, u";"_S)));
+        print(fs::path::sep == fs::path::sep);
+        print(in(fs::path::sep, make_tuple(u"/"_S, uR"(\)"_S)));
+        print(fs::path::split_ext(u"a/b/c.txt"_S) == make_tuple(u"a/b/c"_S, u".txt"_S));
+        print(fs::path::split_ext(u"c.txt"_S) == make_tuple(u"c"_S, u".txt"_S));
+        print(fs::path::split_ext(u"a/b.c/d"_S) == make_tuple(u"a/b.c/d"_S, u""_S));
+    }
+} code_block_1;
+
+
+print('Number: %4g, %g.' % (1.1, 1.1))
+===
+print(‘Number: #4, #..’.format(1.1, 1.1))
+===
+struct CodeBlock1
+{
+    CodeBlock1()
+    {
+        print(u"Number: #4, #.."_S.format(1.1, 1.1));
+    }
+} code_block_1;
+
+
+i = 0
+s = 'Array[Int]'
+while i < len(s):
+    c = s[i]
+    if c == '[':
+        print('<')
+    elif c == ']':
+        print('>')
+    else:
+        print(c, end = '')
+    i += 1
+===
+V i = 0
+V s = ‘Array[Int]’
+L i < s.len
+   V c = s[i]
+   S c
+      ‘[’
+         print(‘<’)
+      ‘]’
+         print(‘>’)
+      E
+         print(c, end' ‘’)
+   i++
+===
+auto i = 0;
+auto s = u"Array[Int]"_S;
+
+struct CodeBlock1
+{
+    CodeBlock1()
+    {
+        while (i < s.len()) {
+            auto c = s[i];
+            switch (c)
+            {
+            case u'[':
+                print(u"<"_S);
+                break;
+            case u']':
+                print(u">"_S);
+                break;
+            default:
+                print(c, u""_S);
+                break;
+            }
+            i++;
+        }
+    }
+} code_block_1;
+
+
+i = 0
+s = 'Array[Int]'
+while i < len(s):
+    c = s[i]
+    if c == '[':
+        print('<')
+    elif c == ']':
+        print('>')
+    print(c, end = '')
+    i += 1
+===
+V i = 0
+V s = ‘Array[Int]’
+L i < s.len
+   V c = s[i]
+   S c
+      ‘[’
+         print(‘<’)
+      ‘]’
+         print(‘>’)
+   print(c, end' ‘’)
+   i++
+===
+auto i = 0;
+auto s = u"Array[Int]"_S;
+
+struct CodeBlock1
+{
+    CodeBlock1()
+    {
+        while (i < s.len()) {
+            auto c = s[i];
+            switch (c)
+            {
+            case u'[':
+                print(u"<"_S);
+                break;
+            case u']':
+                print(u">"_S);
+                break;
+            }
+            print(c, u""_S);
+            i++;
+        }
+    }
+} code_block_1;
+
+
+l1 = lambda: None
+l2 = lambda x: x[0]
+l3 = lambda self: self
+l5 = lambda self: self.instr
+l4 = lambda x, y, reverse = False: y < x if reverse else x < y
+print(l4(1, 2))
+print(l4(1, 2, True))
+===
+V l1 = () -> N
+V l2 = x -> x[0]
+V l3 = self -> self
+V l5 = self -> self.instr
+V l4 = (x, y, reverse = 0B) -> I reverse {y < x} E x < y
+print(l4(1, 2))
+print(l4(1, 2, 1B))
+===
+auto l1 = [](){return nullptr;};
+auto l2 = [](const auto &x){return _get<0>(x);};
+auto l3 = [](const auto &self){return self;};
+auto l5 = [](const auto &self){return self.instr;};
+auto l4 = [](const auto &x, const auto &y, const decltype(false) &reverse = false){return reverse ? y < x : x < y;};
+
+struct CodeBlock1
+{
+    CodeBlock1()
+    {
+        print(l4(1, 2));
+        print(l4(1, 2, true));
+    }
+} code_block_1;
+
+
+from enum import IntEnum
+
+class Category(IntEnum):
+    NAME = 0 # or IDENTIFIER
+    KEYWORD = 1
+    CONSTANT = 2
+    TEST_CATEGORY = 10
+    TEST_CATEGORY2 = 11
+    TEST_CATEGORY3 = 11
+===
+T.enum Category
+   NAME
+   KEYWORD
+   CONSTANT
+   TEST_CATEGORY = 10
+   TEST_CATEGORY2
+   TEST_CATEGORY3 = 11
+===
+enum class Category {
+    NAME,
+    KEYWORD,
+    CONSTANT,
+    TEST_CATEGORY = 10,
+    TEST_CATEGORY2,
+    TEST_CATEGORY3 = 11
+};
+
+
+# This test is also[‘as previous’] failed without `if token is not None:` under ‘this `if` was added in revision 105[‘Almost complete work on tests/python_to_cpp/pqmarkup.txt’]’
+c = 1
+if c == 1:
+    print(1)
+elif c == 2:
+    print(2)
+===
+S 1
+   1
+      print(1)
+   2
+      print(2)
+===
+struct CodeBlock1
+{
+    CodeBlock1()
+    {
+        switch (1)
+        {
+        case 1:
+            print(1);
+            break;
+        case 2:
+            print(2);
+            break;
+        }
+    }
+} code_block_1;
+
+
+import syntax_highlighter_for_pqmarkup
+try:
+    print(syntax_highlighter_for_pqmarkup.highlight('Python', 'a = 0 # c'))
+    print(syntax_highlighter_for_pqmarkup.highlight('11l', 'V a = 0 // c'))
+except syntax_highlighter_for_pqmarkup.Error as e:
+    print('Syntax highlighter error: ' + e.message + ' at ' + str(e.pos))
+===
+//import syntax_highlighter_for_pqmarkup
+X.try
+   print(syntax_highlighter_for_pqmarkup:highlight(‘Python’, ‘a = 0 # c’))
+   print(syntax_highlighter_for_pqmarkup:highlight(‘11l’, ‘V a = 0 // c’))
+X.catch syntax_highlighter_for_pqmarkup:Error e
+   print(‘Syntax highlighter error: ’e.message‘ at ’String(e.pos))
+===
+namespace syntax_highlighter_for_pqmarkup {
+#include "syntax_highlighter_for_pqmarkup.hpp"
+}
+
+struct CodeBlock1
+{
+    CodeBlock1()
+    {
+        try
+        {
+            print(syntax_highlighter_for_pqmarkup::highlight(u"Python"_S, u"a = 0 # c"_S));
+            print(syntax_highlighter_for_pqmarkup::highlight(u"11l"_S, u"V a = 0 // c"_S));
+        }
+        catch (const syntax_highlighter_for_pqmarkup::Error& e)
+        {
+            print(u"Syntax highlighter error: "_S + e.message + u" at "_S + String(e.pos));
+        }
+    }
+} code_block_1;
+
+
+import test_deep_imports
+print()
+===
+//import test_deep_imports
+print()
+===
+struct CodeBlock1
+{
+    CodeBlock1()
+    {
+        print();
+    }
+} code_block_1;
+
+
+class Converter:
+    instr : str
+
+    def to_html(self):
+        f = lambda: self.instr
+        def ff():
+            return self.instr
+        i = 0
+        g = lambda: self.instr[i]
+        def gg():
+            return self.instr[i]
+        a = [self.instr[i] for i in range(9)]
+===
+T Converter
+   String instr
+
+   F to_html()
+      V f = () -> @.instr
+      F ff()
+         R @.instr
+      V i = 0
+      V g = () -> @.instr[@i]
+      F gg()
+         R @.instr[@i]
+      V a = (0.<9).map(i -> @.instr[i])
+===
+class Converter
+{
+public:
+    String instr;
+
+    auto to_html()
+    {
+        auto f = [this](){return instr;};
+        auto ff = [this]()
+        {
+            return instr;
+        };
+        auto i = 0;
+        auto g = [&i, this](){return instr[i];};
+        auto gg = [&i, this]()
+        {
+            return instr[i];
+        };
+        auto a = range_el(0, 9).map([this](const auto &i){return instr[i];});
+    }
+};
+
+
+for ii in (0, 1, 2):
+    print(ii)
+for i in (10,):
+    print(i)
+===
+L(ii) (0, 1, 2)
+   print(ii)
+L(i) (10,)
+   print(i)
+===
+struct CodeBlock1
+{
+    CodeBlock1()
+    {
+        for (auto &&ii : make_tuple(0, 1, 2))
+            print(ii);
+        for (auto &&i : make_tuple(10))
+            print(i);
+    }
+} code_block_1;
+
+
+class Aa:
+    _a : 'Aa' = None
+    class Bb:
+        _b : 'Bb' = None
+        d = 1
+    b : Bb = Bb()
+
+def f(a : Aa):
+    print(a.b.d)
+
+f(Aa())
+===
+T Aa
+   Aa? _a
+   T Bb
+      Bb? _b
+      d = 1
+   Bb b = Bb()
+
+F f(Aa a)
+   print(a.b.d)
+f(Aa())
+===
+class Aa
+{
+public:
+    std::unique_ptr<Aa> _a;
+    class Bb
+    {
+    public:
+        std::unique_ptr<Bb> _b;
+        decltype(1) d = 1;
+    };
+    std::unique_ptr<Bb> b = std::make_unique<Bb>();
+};
+
+auto f(std::unique_ptr<Aa> a)
+{
+    print(a->b->d);
+}
+
+struct CodeBlock1
+{
+    CodeBlock1()
+    {
+        f(std::make_unique<Aa>());
+    }
+} code_block_1;
+
+
+class Aa:
+    _a : 'Aa' = None
+    class Bb:
+        _b : 'Bb' = None
+        class Cc:
+            _c : 'Cc' = None
+            d = 1
+        c : Cc = Cc()
+    b : Bb = Bb()
+
+def f(a : Aa):
+    print(a.b.c.d)
+
+f(Aa())
+===
+T Aa
+   Aa? _a
+   T Bb
+      Bb? _b
+      T Cc
+         Cc? _c
+         d = 1
+      Cc c = Cc()
+   Bb b = Bb()
+
+F f(Aa a)
+   print(a.b.c.d)
+f(Aa())
+===
+class Aa
+{
+public:
+    std::unique_ptr<Aa> _a;
+    class Bb
+    {
+    public:
+        std::unique_ptr<Bb> _b;
+        class Cc
+        {
+        public:
+            std::unique_ptr<Cc> _c;
+            decltype(1) d = 1;
+        };
+        std::unique_ptr<Cc> c = std::make_unique<Cc>();
+    };
+    std::unique_ptr<Bb> b = std::make_unique<Bb>();
+};
+
+auto f(std::unique_ptr<Aa> a)
+{
+    print(a->b->c->d);
+}
+
+struct CodeBlock1
+{
+    CodeBlock1()
+    {
+        f(std::make_unique<Aa>());
+    }
+} code_block_1;
+
+
+class Node:
+    first_child : 'Node' = None
+    value : int
+n = Node()
+m : Node
+if False:
+    print(n.first_child.first_child.first_child.value)
+    print(m.first_child.first_child.first_child.value)
+===
+T Node
+   Node? first_child
+   Int value
+V n = Node()
+Node m
+I 0B
+   print(n.first_child.first_child.first_child.value)
+   print(m.first_child.first_child.first_child.value)
+===
+class Node
+{
+public:
+    std::unique_ptr<Node> first_child;
+    int value;
+};
+auto n = std::make_unique<Node>();
+std::unique_ptr<Node> m;
+
+struct CodeBlock1
+{
+    CodeBlock1()
+    {
+        if (false) {
+            print(n->first_child->first_child->first_child->value);
+            print(m->first_child->first_child->first_child->value);
+        }
+    }
+} code_block_1;
+
+
+def f():
+    nn = 2
+    nn_to_n = {n*nn: n for n in range(10)}
+    print(nn_to_n)
+===
+F f()
+   V nn = 2
+   V nn_to_n = Dict(0.<10, n -> (n * @nn, n))
+   print(nn_to_n)
+===
+auto f()
+{
+    auto nn = 2;
+    auto nn_to_n = create_dict(range_el(0, 10), [&nn](const auto &n){return make_tuple(n * nn, n);});
+    print(nn_to_n);
+}
+
+
+print(0x1000_0000_0000 // 0x1000)
+a = 6
+a //= 2
+print(a)
+===
+print(1000'0000'0000 I/ 10'00)
+V a = 6
+a I/= 2
+print(a)
+===
+struct CodeBlock1
+{
+    CodeBlock1()
+    {
+        print(idiv(0x1000'0000'0000, 0x10'00));
+    }
+} code_block_1;
+auto a = 6;
+
+struct CodeBlock2
+{
+    CodeBlock2()
+    {
+        a = idiv(a, 2);
+        print(a);
+    }
+} code_block_2;
+
+
+s = set() # int
+s.add(1)
+print(1 in s)
+print(2 in s)
+===
+V s = Set[Int]()
+s.add(1)
+print(1 C s)
+print(2 C s)
+===
+auto s = Set<int>();
+
+struct CodeBlock1
+{
+    CodeBlock1()
+    {
+        s.add(1);
+        print(in(1, s));
+        print(in(2, s));
+    }
+} code_block_1;
+
+
+class Class:
+    a : int
+
+    def __init__(a):
+        self.a = a
+        self.b = 0
+        self.s = set() # str
+        self.final : List[List[int]] = [9 * [0] for i in range(9)]
+===
+T Class
+   Int a
+   b = 0
+   s = Set[String]()
+   [[Int]] final = (0.<9).map(i -> 9 * [0])
+
+   F (a)
+      .a = a
+===
+class Class
+{
+public:
+    int a;
+    decltype(0) b = 0;
+    decltype(Set<String>()) s = Set<String>();
+    Array<Array<int>> final = range_el(0, 9).map([](const auto &i){return 9 * create_array({0});});
+
+    template <typename T1> Class(const T1 &a) :
+        a(a)
+    {
+    }
+};
+
+
+def f() -> List[str]:
+   return []
+===
+F f() -> [String]
+   R []
+===
+Array<String> f()
+{
+    return Array<String>();
+}
+
+
+def f() -> Dict[str, str]:
+   return {}
+===
+F f() -> Dict[String, String]
+   R Dict()
+===
+Dict<String, String> f()
+{
+    return Dict<String, String>();
+}
+
+
+from itertools import product
+
+print(list(product([1, 2], [3, 4])))     # Array<Tvec<int,2> >
+print(list(product([1.0, 2.0], [3, 4]))) # Array<std::tuple<double,int> >
+print(list(product(range(3), range(1, 4))))
+
+print(list(zip([1, 2], [10, 20])))
+print(list(zip([1.0, 2.0], [10, 20])))
+===
+print(cart_product([1, 2], [3, 4]))
+print(cart_product([1.0, 2.0], [3, 4]))
+print(cart_product(0.<3, 1..3))
+print(zip([1, 2], [10, 20]))
+print(zip([1.0, 2.0], [10, 20]))
+===
+struct CodeBlock1
+{
+    CodeBlock1()
+    {
+        print(cart_product(create_array({1, 2}), create_array({3, 4})));
+        print(cart_product(create_array({1.0, 2.0}), create_array({3, 4})));
+        print(cart_product(range_el(0, 3), range_ee(1, 3)));
+        print(zip(create_array({1, 2}), create_array({10, 20})));
+        print(zip(create_array({1.0, 2.0}), create_array({10, 20})));
+    }
+} code_block_1;
+
+
+print(set([1, 2, 3]).difference(set([2, 4]))); print({1, 2, 3}.difference({2, 4}))
+print(set([2, 4]).difference(set([1, 2, 3]))); print({2, 4}.difference({1, 2, 3}))
+print({1})
+print({1,})
+Byte = int
+print([Byte(1), 2])
+print({Byte(1), 2})
+===
+print(Set([1, 2, 3]).difference(Set([2, 4])))
+print(Set([1, 2, 3]).difference(Set([2, 4])))
+print(Set([2, 4]).difference(Set([1, 2, 3])))
+print(Set([2, 4]).difference(Set([1, 2, 3])))
+print(Set([1]))
+print(Set([1]))
+print([Byte(1), 2])
+print(Set([Byte(1), 2]))
+===
+struct CodeBlock1
+{
+    CodeBlock1()
+    {
+        print(create_set({1, 2, 3}).difference(create_set({2, 4})));
+        print(create_set({1, 2, 3}).difference(create_set({2, 4})));
+        print(create_set({2, 4}).difference(create_set({1, 2, 3})));
+        print(create_set({2, 4}).difference(create_set({1, 2, 3})));
+        print(create_set({1}));
+        print(create_set({1}));
+        print(create_array<Byte>({Byte(1), 2}));
+        print(create_set<Byte>({Byte(1), 2}));
+    }
+} code_block_1;
+
+
+(a, b) = (1, 2)
+(a, b) = (3, 4)
+(b, c) = (5, 6)
+(d, c) = (7, 8)
+u = [1, 2]
+(i, j) = (0, 1)
+(u[i], u[j]) = (u[j], u[i])
+===
+V (a, b) = (1, 2)
+(a, b) = (3, 4)
+(b, V c) = (5, 6)
+(V d, c) = (7, 8)
+V u = [1, 2]
+V (i, j) = (0, 1)
+(u[i], u[j]) = (u[j], u[i])
+===
+struct CodeBlock1
+{
+    CodeBlock1()
+    {
+        auto [a, b] = make_tuple(1, 2);
+        assign_from_tuple(a, b, make_tuple(3, 4));
+        TUPLE_ELEMENT_T(1, make_tuple(5, 6)) c;
+        assign_from_tuple(b, c, make_tuple(5, 6));
+        TUPLE_ELEMENT_T(0, make_tuple(7, 8)) d;
+        assign_from_tuple(d, c, make_tuple(7, 8));
+    }
+} code_block_1;
+auto u = create_array({1, 2});
+
+struct CodeBlock2
+{
+    CodeBlock2()
+    {
+        auto [i, j] = make_tuple(0, 1);
+        assign_from_tuple(u[i], u[j], make_tuple(u[j], u[i]));
+    }
+} code_block_2;
+
+
+for x, y in [(1, 2), (3, 4)]:
+    print(str(x) + ', ' + str(y))
+
+for x, y, z in [(1, 2, 3), (4, 5, 6)]:
+    print(str(x) + ', ' + str(y) + ', ' + str(z))
+===
+L(x, y) [(1, 2), (3, 4)]
+   print(String(x)‘, ’String(y))
+
+L(x, y, z) [(1, 2, 3), (4, 5, 6)]
+   print(String(x)‘, ’String(y)‘, ’String(z))
+===
+struct CodeBlock1
+{
+    CodeBlock1()
+    {
+        for (auto &&[x, y] : create_array({make_tuple(1, 2), make_tuple(3, 4)}))
+            print(String(x) + u", "_S + String(y));
+        for (auto &&[x, y, z] : create_array({make_tuple(1, 2, 3), make_tuple(4, 5, 6)}))
+            print(String(x) + u", "_S + String(y) + u", "_S + String(z));
+    }
+} code_block_1;
+
+
+class Rayo: # &
+    pass
+class Vector:
+    pass
+class Base:
+    def intersecta(self, r : Rayo, v : Vector) -> None:
+        raise NotImplementedError()
+class Derived(Base):
+    def intersecta(self, r : Rayo, v : Vector):
+        pass
+===
+T Rayo
+{
+}
+T Vector
+{
+}
+T Base
+   F.virtual.abstract intersecta(Rayo& r, Vector v) -> N
+T Derived(Base)
+   F.virtual.assign intersecta(Rayo& r, Vector v) -> N
+   {
+   }
+===
+class Rayo
+{
+};
+
+class Vector
+{
+};
+
+class Base
+{
+public:
+    virtual void intersecta(Rayo &r, const Vector &v) = 0;
+};
+class Derived : public Base
+{
+public:
+    virtual void intersecta(Rayo &r, const Vector &v) override
+    {
+    }
+};
+
+
+from typing import Optional
+
+class Rayo: # &
+    objInter : Optional['Cuerpo'] # &
+
+    def __init__(self):
+        self.objInter = None
+
+class Cuerpo:
+    tipo : str
+    material : int
+
+    def init(self, tipo, material):
+        self.tipo = tipo
+        self.material = material
+
+    def intersecta(self, r : Rayo) -> None:
+        raise NotImplementedError()
+
+class Esfera(Cuerpo):
+    def __init__(self, material):
+        self.init('esfera', material)
+
+    def intersecta(self, r : Rayo):
+        r.objInter = self
+
+class Plano(Cuerpo):
+    def __init__(self, material):
+        self.init('plano', material)
+
+    def intersecta(self, r : Rayo):
+        r.objInter = self
+
+class Scene:
+    def __init__(self):
+        self.lObjetos : List[Cuerpo] = []
+        sph = Esfera(1)
+        self.lObjetos.append(sph)
+        pl = Plano(2)
+        self.lObjetos.append(pl)
+
+scene = Scene()
+
+def calculaSombra(r : Rayo, objChoque):
+    for obj in scene.lObjetos:
+        r.objInter = None
+        obj.intersecta(r)
+        print(obj is not objChoque)
+
+def trazar(r : Rayo):
+    for obj in scene.lObjetos:    # Probamos con todos los objetos
+        obj.intersecta(r)
+
+    if r.objInter is not None:
+        matIndex = r.objInter.material
+        rayoLuz = Rayo()
+        calculaSombra(rayoLuz, r.objInter)
+
+r = Rayo()
+trazar(r)
+===
+
+T Rayo
+   Cuerpo& objInter
+
+   F ()
+      .objInter = N
+
+T Cuerpo
+   String tipo
+   Int material
+
+   F init(tipo, material)
+      .tipo = tipo
+      .material = material
+   F.virtual.abstract intersecta(Rayo& r) -> N
+
+T Esfera(Cuerpo)
+   F (material)
+      .init(‘esfera’, material)
+
+   F.virtual.assign intersecta(Rayo& r) -> N
+      r.objInter = (.)
+
+T Plano(Cuerpo)
+   F (material)
+      .init(‘plano’, material)
+
+   F.virtual.assign intersecta(Rayo& r) -> N
+      r.objInter = (.)
+
+T Scene
+   [Cuerpo] lObjetos
+   F ()
+      V sph = Esfera(1)
+      .lObjetos.append(sph)
+      V pl = Plano(2)
+      .lObjetos.append(pl)
+V scene = Scene()
+
+F calculaSombra(Rayo& r; objChoque)
+   L(obj) :scene.lObjetos
+      r.objInter = N
+      obj.intersecta(r)
+      print(&obj != &objChoque)
+
+F trazar(Rayo& r)
+   L(obj) :scene.lObjetos
+      obj.intersecta(r)
+
+   I r.objInter != N
+      V matIndex = r.objInter.material
+      V rayoLuz = Rayo()
+      calculaSombra(&rayoLuz, r.objInter)
+V r = Rayo()
+trazar(&r)
+===
+class Cuerpo;
+
+class Rayo
+{
+public:
+    Cuerpo *objInter;
+
+    Rayo()
+    {
+        objInter = nullptr;
+    }
+};
+
+class Cuerpo
+{
+public:
+    String tipo;
+    int material;
+
+    template <typename T1, typename T2> auto init(const T1 &tipo, const T2 &material)
+    {
+        this->tipo = tipo;
+        this->material = material;
+    }
+    virtual void intersecta(Rayo &r) = 0;
+};
+
+class Esfera : public Cuerpo
+{
+public:
+    template <typename T1> Esfera(const T1 &material)
+    {
+        init(u"esfera"_S, material);
+    }
+
+    virtual void intersecta(Rayo &r) override
+    {
+        r.objInter = &*this;
+    }
+};
+
+class Plano : public Cuerpo
+{
+public:
+    template <typename T1> Plano(const T1 &material)
+    {
+        init(u"plano"_S, material);
+    }
+
+    virtual void intersecta(Rayo &r) override
+    {
+        r.objInter = &*this;
+    }
+};
+
+class Scene
+{
+public:
+    Array<std::unique_ptr<Cuerpo>> lObjetos;
+    Scene()
+    {
+        auto sph = std::make_unique<Esfera>(1);
+        lObjetos.append(std::move(sph));
+        auto pl = std::make_unique<Plano>(2);
+        lObjetos.append(std::move(pl));
+    }
+};
+auto scene = Scene();
+
+template <typename T2> auto calculaSombra(Rayo &r, const T2 &objChoque)
+{
+    for (auto &&obj : ::scene.lObjetos) {
+        r.objInter = nullptr;
+        obj->intersecta(r);
+        print(&*obj != objChoque);
+    }
+}
+
+auto trazar(Rayo &r)
+{
+    for (auto &&obj : ::scene.lObjetos)
+        obj->intersecta(r);
+
+    if (r.objInter != nullptr) {
+        auto matIndex = r.objInter->material;
+        auto rayoLuz = Rayo();
+        calculaSombra(rayoLuz, r.objInter);
+    }
+}
+auto r = Rayo();
+
+struct CodeBlock1
+{
+    CodeBlock1()
+    {
+        trazar(r);
+    }
+} code_block_1;
+
+
+def PIXEL00_0(rgb_out, pOut, BpL, c): rgb_out[pOut] = c[5]
+===
+F PIXEL00_0(rgb_out, pOut, BpL, c)
+   rgb_out[pOut] = c[5]
+===
+template <typename T1, typename T2, typename T3, typename T4> auto PIXEL00_0(const T1 &rgb_out, const T2 &pOut, const T3 &BpL, const T4 &c)
+{
+    rgb_out.set(pOut, _get<5>(c));
+}
+
+
+import random
+
+print(random.randrange(3))
+print(random.randrange(1, 3))
+print(random.randint(1, 3))
+===
+//import random
+print(random:(3))
+print(random:(1 .< 3))
+print(random:(1 .. 3))
+===
+struct CodeBlock1
+{
+    CodeBlock1()
+    {
+        print(randomns::_(3));
+        print(randomns::_(range_el(1, 3)));
+        print(randomns::_(range_ee(1, 3)));
+    }
+} code_block_1;
+
+
+print([i*i for i in [1, 2, 3] if i != 2])
+print([a+b for a, b in [(1, 2  ), (2, 3  ), (3, 4  )] if a != 2])
+print([a+b for a, b in [(1, 2.0), (2, 3.0), (3, 4.0)] if a != 2])
+print([a+b+c for a, b, c in [(1, 2  , 3), (2, 3  , 4), (3, 4  , 5)] if a != 2])
+print([a+b+c for a, b, c in [(1, 2.0, 3), (2, 3.0, 4), (3, 4.0, 5)] if a != 2])
+print(sum(i*i for i in [1, 2, 3]))
+print(sum(i*i for i in [1, 2, 3] if i != 2))
+print(sum(a*b for a, b in [(1, 2  ), (2, 3  ), (3, 4  )]))
+print(sum(a*b for a, b in [(1, 2.0), (2, 3.0), (3, 4.0)]))
+print(sum(a*b*c for a, b, c in [(1, 2  , 3), (2, 3  , 4), (3, 4  , 5)]))
+print(sum(a*b*c for a, b, c in [(1, 2.0, 3), (2, 3.0, 4), (3, 4.0, 5)]))
+===
+print([1, 2, 3].filter(i -> i != 2).map(i -> i * i))
+print([(1, 2), (2, 3), (3, 4)].filter((a, b) -> a != 2).map((a, b) -> a + b))
+print([(1, 2.0), (2, 3.0), (3, 4.0)].filter((a, b) -> a != 2).map((a, b) -> a + b))
+print([(1, 2, 3), (2, 3, 4), (3, 4, 5)].filter((a, b, c) -> a != 2).map((a, b, c) -> a + b + c))
+print([(1, 2.0, 3), (2, 3.0, 4), (3, 4.0, 5)].filter((a, b, c) -> a != 2).map((a, b, c) -> a + b + c))
+print(sum([1, 2, 3].map(i -> i * i)))
+print(sum([1, 2, 3].filter(i -> i != 2).map(i -> i * i)))
+print(sum([(1, 2), (2, 3), (3, 4)].map((a, b) -> a * b)))
+print(sum([(1, 2.0), (2, 3.0), (3, 4.0)].map((a, b) -> a * b)))
+print(sum([(1, 2, 3), (2, 3, 4), (3, 4, 5)].map((a, b, c) -> a * b * c)))
+print(sum([(1, 2.0, 3), (2, 3.0, 4), (3, 4.0, 5)].map((a, b, c) -> a * b * c)))
+===
+struct CodeBlock1
+{
+    CodeBlock1()
+    {
+        print(create_array({1, 2, 3}).filter([](const auto &i){return i != 2;}).map([](const auto &i){return i * i;}));
+        print(create_array({make_tuple(1, 2), make_tuple(2, 3), make_tuple(3, 4)}).filter([](const auto &a, const auto &b){return a != 2;}).map([](const auto &a, const auto &b){return a + b;}));
+        print(create_array({make_tuple(1, 2.0), make_tuple(2, 3.0), make_tuple(3, 4.0)}).filter([](const auto &a, const auto &b){return a != 2;}).map([](const auto &a, const auto &b){return a + b;}));
+        print(create_array({make_tuple(1, 2, 3), make_tuple(2, 3, 4), make_tuple(3, 4, 5)}).filter([](const auto &a, const auto &b, const auto &c){return a != 2;}).map([](const auto &a, const auto &b, const auto &c){return a + b + c;}));
+        print(create_array({make_tuple(1, 2.0, 3), make_tuple(2, 3.0, 4), make_tuple(3, 4.0, 5)}).filter([](const auto &a, const auto &b, const auto &c){return a != 2;}).map([](const auto &a, const auto &b, const auto &c){return a + b + c;}));
+        print(sum_map(create_array({1, 2, 3}), [](const auto &i){return i * i;}));
+        print(sum_map(create_array({1, 2, 3}).filter([](const auto &i){return i != 2;}), [](const auto &i){return i * i;}));
+        print(sum_map(create_array({make_tuple(1, 2), make_tuple(2, 3), make_tuple(3, 4)}), [](const auto &a, const auto &b){return a * b;}));
+        print(sum_map(create_array({make_tuple(1, 2.0), make_tuple(2, 3.0), make_tuple(3, 4.0)}), [](const auto &a, const auto &b){return a * b;}));
+        print(sum_map(create_array({make_tuple(1, 2, 3), make_tuple(2, 3, 4), make_tuple(3, 4, 5)}), [](const auto &a, const auto &b, const auto &c){return a * b * c;}));
+        print(sum_map(create_array({make_tuple(1, 2.0, 3), make_tuple(2, 3.0, 4), make_tuple(3, 4.0, 5)}), [](const auto &a, const auto &b, const auto &c){return a * b * c;}));
+    }
+} code_block_1;

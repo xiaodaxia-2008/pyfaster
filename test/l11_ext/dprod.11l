@@ -1,0 +1,7 @@
+
+F dprod([Float] &l0, [Float] &l1) -> Float
+   Int n = l0.len
+   Float r = 0
+   L(i) 0 .< n
+      r += l0[i] * l1[i]
+   R r

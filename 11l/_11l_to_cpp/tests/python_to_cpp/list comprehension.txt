@@ -1,0 +1,266 @@
+def f():
+    selection_strings = [('selection', True), ('.hg', False)]
+    c = '.'
+    '\n'.join(s[0] + c for s in selection_strings)
+===
+F f()
+   V selection_strings = [(‘selection’, 1B), (‘.hg’, 0B)]
+   V c = ‘.’
+   selection_strings.map(s -> s[0]‘’@c).join("\n")
+===
+auto f()
+{
+    auto selection_strings = create_array({make_tuple(u"selection"_S, true), make_tuple(u".hg"_S, false)});
+    auto c = u"."_S;
+    selection_strings.map([&c](const auto &s){return _get<0>(s) + c;}).join(u"\n"_S);
+}
+
+
+def f():
+    selection_strings = [('selection', True), ('.hg', False)]
+    c = '.'
+    '\n'.join([s[0] + c for s in selection_strings])
+===
+F f()
+   V selection_strings = [(‘selection’, 1B), (‘.hg’, 0B)]
+   V c = ‘.’
+   (selection_strings.map(s -> s[0]‘’@c)).join("\n")
+===
+auto f()
+{
+    auto selection_strings = create_array({make_tuple(u"selection"_S, true), make_tuple(u".hg"_S, false)});
+    auto c = u"."_S;
+    (selection_strings.map([&c](const auto &s){return _get<0>(s) + c;})).join(u"\n"_S);
+}
+
+
+def f():
+    selection_strings = [('selection', True), ('.hg', False)]
+    c = '.'
+    '\n'.join(s[0] + c for s in selection_strings if s[0][0] != c)
+===
+F f()
+   V selection_strings = [(‘selection’, 1B), (‘.hg’, 0B)]
+   V c = ‘.’
+   selection_strings.filter(s -> s[0][0] != @c).map(s -> s[0]‘’@c).join("\n")
+===
+auto f()
+{
+    auto selection_strings = create_array({make_tuple(u"selection"_S, true), make_tuple(u".hg"_S, false)});
+    auto c = u"."_S;
+    selection_strings.filter([&c](const auto &s){return _get<0>(_get<0>(s)) != c;}).map([&c](const auto &s){return _get<0>(s) + c;}).join(u"\n"_S);
+}
+
+
+def f():
+    selection_strings = [('selection', True), ('.hg', False)]
+    c = '.'
+    '\n'.join(s for s in selection_strings if s[0][0] != c)
+===
+F f()
+   V selection_strings = [(‘selection’, 1B), (‘.hg’, 0B)]
+   V c = ‘.’
+   selection_strings.filter(s -> s[0][0] != @c).join("\n")
+===
+auto f()
+{
+    auto selection_strings = create_array({make_tuple(u"selection"_S, true), make_tuple(u".hg"_S, false)});
+    auto c = u"."_S;
+    selection_strings.filter([&c](const auto &s){return _get<0>(_get<0>(s)) != c;}).join(u"\n"_S);
+}
+
+
+def f():
+    dirs = ['tests', '.hg']
+    dirs = [d for d in dirs if d[0] != '.']
+    assert(dirs == ['tests'])
+===
+F f()
+   V dirs = [‘tests’, ‘.hg’]
+   dirs = dirs.filter(d -> d[0] != ‘.’)
+   assert(dirs == [‘tests’])
+===
+auto f()
+{
+    auto dirs = create_array({u"tests"_S, u".hg"_S});
+    dirs = dirs.filter([](const auto &d){return _get<0>(d) != u'.';});
+    assert(dirs == create_array({u"tests"_S}));
+}
+
+
+def f():
+    dirs = [('tests', 1), ('.hg', 2)]
+    ndirs = [d[1] for d in dirs if d[0][0] != '.']
+    assert(ndirs == [1])
+===
+F f()
+   V dirs = [(‘tests’, 1), (‘.hg’, 2)]
+   V ndirs = dirs.filter(d -> d[0][0] != ‘.’).map(d -> d[1])
+   assert(ndirs == [1])
+===
+auto f()
+{
+    auto dirs = create_array({make_tuple(u"tests"_S, 1), make_tuple(u".hg"_S, 2)});
+    auto ndirs = dirs.filter([](const auto &d){return _get<0>(_get<0>(d)) != u'.';}).map([](const auto &d){return _get<1>(d);});
+    assert(ndirs == create_array({1}));
+}
+
+
+python_types_to_11l = {'int':'Int', 'str':'String', 'bool':'Bool', 'List':'Array', 'Tuple':'Tuple'}
+
+class ASTTypeHint:
+    type_args : List[str]
+    def to_str(self):
+        return ', '.join(python_types_to_11l[ty] for ty in self.type_args)
+===
+V python_types_to_11l = [‘int’ = ‘Int’, ‘str’ = ‘String’, ‘bool’ = ‘Bool’, ‘List’ = ‘Array’, ‘Tuple’ = ‘Tuple’]
+
+T ASTTypeHint
+   [String] type_args
+   F to_str()
+      R .type_args.map(ty -> :python_types_to_11l[ty]).join(‘, ’)
+===
+auto python_types_to_11l = create_dict(dict_of(u"int"_S, u"Int"_S)(u"str"_S, u"String"_S)(u"bool"_S, u"Bool"_S)(u"List"_S, u"Array"_S)(u"Tuple"_S, u"Tuple"_S));
+
+class ASTTypeHint
+{
+public:
+    Array<String> type_args;
+    auto to_str()
+    {
+        return type_args.map([](const auto &ty){return ::python_types_to_11l[ty];}).join(u", "_S);
+    }
+};
+
+
+def split_len(seq, length):
+    return [seq[i:i+length] for i in range(0, len(seq), length)]
+def f():
+    assert(split_len('o-o o-x o-o', 4) == ['o-o ', 'o-x ', 'o-o'])
+    r1 = range(10)
+    r2 = range(1, 10)
+    r3 = range(10, 1, -1)
+    assert([i*2 for i in range(3)] == [0, 2, 4])
+===
+F split_len(seq, length)
+   R (0 .< seq.len).step(length).map(i -> @seq[i .< i + @length])
+F f()
+   assert(split_len(‘o-o o-x o-o’, 4) == [‘o-o ’, ‘o-x ’, ‘o-o’])
+   V r1 = 0.<10
+   V r2 = 1..9
+   V r3 = (10.<1).step(-1)
+   assert((0.<3).map(i -> i * 2) == [0, 2, 4])
+===
+template <typename T1, typename T2> auto split_len(const T1 &seq, const T2 &length)
+{
+    return range_el(0, seq.len()).step(length).map([&length, &seq](const auto &i){return seq[range_el(i, i + length)];});
+}
+auto f()
+{
+    assert(split_len(u"o-o o-x o-o"_S, 4) == create_array({u"o-o "_S, u"o-x "_S, u"o-o"_S}));
+    auto r1 = range_el(0, 10);
+    auto r2 = range_ee(1, 9);
+    auto r3 = range_el(10, 1).step(-1);
+    assert(range_el(0, 3).map([](const auto &i){return i * 2;}) == create_array({0, 2, 4}));
+}
+
+
+# Nested list comprehension:
+def f():
+    matrix = [
+        [1, 2, 3, 4],
+        [5, 6, 7, 8],
+        [9, 10, 11, 12],
+    ]
+    r1 = map(lambda i: map(lambda row: row[i], matrix), range(4))
+    r2 = [[row[i] for row in matrix] for i in range(4)]
+    assert(r1 == r2 and r2 == [[1, 5, 9], [2, 6, 10], [3, 7, 11], [4, 8, 12]])
+===
+F f()
+   V matrix = [[1, 2, 3, 4], [5, 6, 7, 8], [9, 10, 11, 12]]
+   V r1 = (0.<4).map(i -> @matrix.map(row -> row[@i]))
+   V r2 = (0.<4).map(i -> @matrix.map(row -> row[@i]))
+   assert(r1 == r2 & r2 == [[1, 5, 9], [2, 6, 10], [3, 7, 11], [4, 8, 12]])
+===
+auto f()
+{
+    auto matrix = create_array({create_array({1, 2, 3, 4}), create_array({5, 6, 7, 8}), create_array({9, 10, 11, 12})});
+    auto r1 = range_el(0, 4).map([&matrix](const auto &i){return matrix.map([&i](const auto &row){return row[i];});});
+    auto r2 = range_el(0, 4).map([&matrix](const auto &i){return matrix.map([&i](const auto &row){return row[i];});});
+    assert(r1 == r2 && r2 == create_array({create_array({1, 5, 9}), create_array({2, 6, 10}), create_array({3, 7, 11}), create_array({4, 8, 12})}));
+}
+
+
+from typing import List
+
+aa = ['1', '2']
+bb = ['x', 'y']
+cc = ['A', 'B']
+nout : List[str] = []
+for a in aa:
+    for b in bb:
+        for c in cc:
+            nout.append(a + '' + b + '' + c)
+print([a + '' + b for a in aa for b in bb] == ['1x', '1y', '2x', '2y'])
+print([a + '' + b for a in aa for b in bb if a + '' + b != '1x'] == ['1y', '2x', '2y'])
+print(nout)
+print([a + '' + b + '' + c for a in aa for b in bb for c in cc])
+print([a + '' + b + '' + c for a in aa for b in bb for c in cc if a + '' + b + '' + c != '2yB'])
+===
+V aa = [‘1’, ‘2’]
+V bb = [‘x’, ‘y’]
+V cc = [‘A’, ‘B’]
+[String] nout
+L(a) aa
+   L(b) bb
+      L(c) cc
+         nout.append(a‘’b‘’c)
+print(multiloop(aa, bb, (a, b) -> a‘’b) == [‘1x’, ‘1y’, ‘2x’, ‘2y’])
+print(multiloop_filtered(aa, bb, (a, b) -> a‘’b != ‘1x’, (a, b) -> a‘’b) == [‘1y’, ‘2x’, ‘2y’])
+print(nout)
+print(multiloop(aa, bb, cc, (a, b, c) -> a‘’b‘’c))
+print(multiloop_filtered(aa, bb, cc, (a, b, c) -> a‘’b‘’c != ‘2yB’, (a, b, c) -> a‘’b‘’c))
+===
+auto aa = create_array({u'1'_C, u'2'_C});
+auto bb = create_array({u'x'_C, u'y'_C});
+auto cc = create_array({u'A'_C, u'B'_C});
+Array<String> nout;
+
+struct CodeBlock1
+{
+    CodeBlock1()
+    {
+        for (auto &&a : aa)
+            for (auto &&b : bb)
+                for (auto &&c : cc)
+                    nout.append(a + b + c);
+        print(multiloop(aa, bb, [](const auto &a, const auto &b){return a + b;}) == create_array({u"1x"_S, u"1y"_S, u"2x"_S, u"2y"_S}));
+        print(multiloop_filtered(aa, bb, [](const auto &a, const auto &b){return a + b != u"1x";}, [](const auto &a, const auto &b){return a + b;}) == create_array({u"1y"_S, u"2x"_S, u"2y"_S}));
+        print(nout);
+        print(multiloop(aa, bb, cc, [](const auto &a, const auto &b, const auto &c){return a + b + c;}));
+        print(multiloop_filtered(aa, bb, cc, [](const auto &a, const auto &b, const auto &c){return a + b + c != u"2yB";}, [](const auto &a, const auto &b, const auto &c){return a + b + c;}));
+    }
+} code_block_1;
+
+
+aa = [1, 2]
+bb = [3, 4]
+print([a for a in aa if [3, 4] == [b for b in bb]])
+print([a for a in aa if [4, 5] == [b + 1 for b in bb]])
+===
+V aa = [1, 2]
+V bb = [3, 4]
+print(aa.filter(a -> [3, 4] == :bb))
+print(aa.filter(a -> [4, 5] == :bb.map(b -> b + 1)))
+===
+auto aa = create_array({1, 2});
+auto bb = create_array({3, 4});
+
+struct CodeBlock1
+{
+    CodeBlock1()
+    {
+        print(aa.filter([](const auto &a){return create_array({3, 4}) == ::bb;}));
+        print(aa.filter([](const auto &a){return create_array({4, 5}) == ::bb.map([](const auto &b){return b + 1;});}));
+    }
+} code_block_1;

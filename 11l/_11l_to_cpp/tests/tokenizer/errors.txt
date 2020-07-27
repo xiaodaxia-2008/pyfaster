@@ -1,0 +1,50 @@
+123'45
+^Error: digit separator in this number is located in the wrong place (should be: 12'345)
+
+
+0000'FFFFFF
+         ^Error: here should be a digit separator in hexadecimal number
+
+
+0000'FF'FF
+       ^Error: digit separator in hexadecimal number is located in the wrong place
+
+
+0000'FFFF'FF
+         ^Error: after this digit separator there should be 4 digits in hexadecimal number
+
+
+00'F
+^Error: wrong short hexadecimal number
+
+
+0'G
+^Error: wrong ultrashort hexadecimal number
+
+
+00'7FF
+     ^Error: expected end of short hexadecimal number
+
+
+0'7F
+   ^Error: expected end of ultrashort hexadecimal number
+
+
+FFF'000
+^Error: digit separator in this hexadecimal number is located in the wrong place
+
+
+s = ‘str
+    ^Error: unpaired left single quotation mark
+
+
+s = '‘str
+     ^Error: unpaired left single quotation mark
+
+
+s = '’
+     ^Error: expected left single quotation mark
+
+
+---
+’

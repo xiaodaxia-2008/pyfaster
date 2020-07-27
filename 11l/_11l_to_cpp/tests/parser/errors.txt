@@ -1,0 +1,236 @@
+F f() R 1
+      ^Error: expected a new scope (indented block or opening curly bracket)
+
+
+r = ‘a’‘b’
+       ^Error: expected end of statement
+
+
+r = "a""b"
+       ^Error: expected end of statement
+
+
+r = ‘a’ ‘b’
+        ^Error: expected end of statement
+
+
+f(‘id=’ id) // (
+        ^Error: expected `)`
+
+
+r = .newlines()‘’(‘ ’ * (indent * 3))‘F ’(I .function_name != ‘__init__’ {.function_name} E ‘’)‘’,
+                                                                                                 ^Error: unknown unary operator
+  ‘(’(I .function_arguments.empty | .function_arguments[0] != ‘self’ {.function_arguments} E .function_arguments[1..]).join(‘, ’)")\n"
+
+
+r = .newlines()‘’(‘ ’ * (indent * 3))‘F ’(I .function_name != ‘__init__’ {.function_name} E ‘’)
+  ‘(’(I .function_arguments.empty | .function_arguments[0] != ‘self’ {.function_arguments} E .function_arguments[1..]).join(‘, ’)")\n"
+^Error: expected end of statement
+
+
+r = .newlines()‘’(‘ ’ * (indent * 3))‘F ’(I .function_name != ‘__init__’ {.function_name} E ‘’)‘(’
+  (I .function_arguments.empty | .function_arguments[0] != ‘self’ {.function_arguments} E .function_arguments[1..]).join(‘, ’)")\n"
+^Error: expected end of statement
+
+
+// This is wrong because there is probability of forgotten comma after `‘(some big ...’`, if you want line joining please specify it explicitly (via appending `""`) // )
+r = .newlines()‘’(‘ ’ * (indent * 3))‘F ’(I .function_name != ‘__init__’ {.function_name} E ‘’)‘(some big ...’
+  ‘... string’(I .function_arguments.empty | .function_arguments[0] != ‘self’ {.function_arguments} E .function_arguments[1..]).join(‘, ’)")\n"
+^Error: expected end of statement
+
+
+L i < s.len & s[i] E ‘0’..‘9’
+                   ^Error: no symbol corresponding to token `E` (belonging to Category.KEYWORD) found while parsing expression
+
+
+.
+ ^Error: unexpected end of source
+
+
+---
+V source = ‘code’
+V s = source.rtrim()
+      ^Error: please wrap `source` in `copy()`
+line_start = source.rfind("\n", source.len - 1)
+
+
+T Ty
+{
+}
+T Ty
+  ^Error: redefinition of already defined identifier is not allowed
+{
+}
+
+
+f(1)
+^Error: call of undefined function `f`
+
+
+F f(a)
+{
+}
+F f(a, b)
+{
+}
+f(1)
+^Error: functions' overloading is not supported for now
+
+
+F f(a = 1, bb = 2)
+   R a + bb
+print(f(b' 3))
+        ^Error: argument `b` is not found in function `f`
+
+
+T Ty
+{
+   F () {}
+   F (a) {}
+}
+V t = Ty()
+      ^Error: constructors' overloading is not supported for now (see type `Ty`)
+
+
+F f(a = 10, b)
+            ^Error: non-default argument follows default argument
+   R a + b
+
+
+F f(a = 10, ', b)
+   R a + b
+f(1)
+   ^Error: missing required argument `b`
+
+
+F f(a = 10, ', b, c)
+   R a + b + c
+f(c' 20)
+  ^Error: argument `b` of function `f` has no default value, please specify its value here
+
+
+:start:
+(String, Int -> String) f
+F ff(s, i)
+   R s * i
+f = ff
+assert(f(‘s’) == ‘ss’)
+        ^Error: wrong number of arguments passed to function pointer
+
+
+X.try
+{
+}
+X.catch 1
+        ^Error: expected exception object type name
+    exit(-1)
+
+
+---
+X.try
+{
+}
+X.catch Exception
+                  ^Error: expected exception object name
+    exit(-1)
+
+
+non_existing_module:func()
+^Error: can not import module `non_existing_module`: file 'tests/parser/non_existing_module.11l' is not found
+
+
+L(i) 10
+   L(j) 20
+      L(k).break
+      ^Error: loop corresponding to this `L(k).break` statement is not found
+
+
+L 10
+   L 20
+      ^^L.break
+      ^Error: loop corresponding to this `^^L.break` statement is not found
+
+
+L 10
+   ^^1
+     ^Error: expected `L.break`
+
+
+L 10
+^Error: this kind of loop does not support `L.last_iteration`
+   I !L.last_iteration
+      print(1)
+
+
+Array[Animal] animals
+     ^Error: type `Animal` is not defined
+
+
+Int Animal
+Array[Animal] animals
+     ^Error: `Animal`: expected a type name
+
+
+T Animal
+   F.virtual.abstract say(arg) -> N
+   ^Error: type should be specified for argument `arg` [for virtual functions all arguments should have types]
+
+
+F.destructor
+^Error: destructor declaration allowed only inside types
+   print(‘destructor called’)
+
+
+F to_html(instr, ohd = 0B, ', habr_html = 0B)
+   print(instr)
+
+to_html(s, 0B, habr_html' 1B) // this is correct
+to_html(s, habr_html' 1B) // and this is correct
+to_html(s, 0B, 1B) // this is wrong
+               ^Error: argument `habr_html` of function `to_html` is named-only
+
+
+T.enum Category
+   NAME
+   Keyword
+   ^Error: enumerators must be uppercase
+
+
+V c = Char(‘’)
+           ^Error: Char can be constructed only from single character string literals
+
+
+T Converter
+   F f()
+      R 0
+
+   F to_html()
+      V f = () -> .f()
+                  ^Error: probably `@` is missing (before this dot)
+
+
+V d = TimeDelta(10)
+                ^Error: argument `days` of function `TimeDelta` is named-only
+
+
+L m
+^Error: please write `L m != 0` instead of `L m`
+   m = m I/ 10
+
+
+String filestr
+print(filestr.ends_with2((‘ ’, "\t")))
+      ^Error: method `ends_with2` is not found in type `String`
+
+
+F tokenize(source, [(Int, Int)]? &comments = N)
+   [String] tokens
+   R tokens
+
+[(Int, Int)] comments
+tokenize(‘’, comments)
+             ^Error: argument `comments` of function `tokenize` is in-out, but there is no `&` prefix
+
+
+V direc = Vector()
+          ^Error: identifier `Vector` is not found

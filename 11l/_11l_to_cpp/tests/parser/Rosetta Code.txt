@@ -1,0 +1,1557 @@
+// https://www.rosettacode.org/wiki/100_doors#Python
+V doors = [0B] * 100
+L(i) 100
+   L(j) (i .< 100).step(i + 1)
+      doors[j] = !doors[j]
+   print(‘Door ’(i + 1)‘: ’(I doors[i] {‘open’} E ‘close’))
+===
+auto doors = create_array({false}) * 100;
+
+struct CodeBlock1
+{
+    CodeBlock1()
+    {
+        for (int i = 0; i < 100; i++) {
+            for (auto j : range_el(i, 100).step(i + 1))
+                doors.set(j, !doors[j]);
+            print(u"Door "_S + (i + 1) + u": "_S + (doors[i] ? u"open"_S : u"close"_S));
+        }
+    }
+} code_block_1;
+
+
+// https://www.rosettacode.org/wiki/Abundant,_deficient_and_perfect_number_classifications#Kotlin
+F sum_proper_divisors(n)
+   R I n < 2 {0} E sum((1 .. n I/ 2).filter(it -> (@n % it) == 0))
+
+V deficient = 0
+V perfect = 0
+V abundant = 0
+
+L(n) 1..20000
+   V sp = sum_proper_divisors(n)
+   I sp < n
+      deficient++
+   E I sp == n
+      perfect++
+   E I sp > n
+      abundant++
+
+print(‘Deficient = ’deficient)
+print(‘Perfect   = ’perfect)
+print(‘Abundant  = ’abundant)
+===
+template <typename T1> auto sum_proper_divisors(const T1 &n)
+{
+    return n < 2 ? 0 : sum(range_ee(1, idiv(n, 2)).filter([&n](const auto &it){return (mod(n, it)) == 0;}));
+}
+auto deficient = 0;
+auto perfect = 0;
+auto abundant = 0;
+
+struct CodeBlock1
+{
+    CodeBlock1()
+    {
+
+        for (auto n : range_ee(1, 20000)) {
+            auto sp = sum_proper_divisors(n);
+            if (sp < n)
+                deficient++;
+            else if (sp == n)
+                perfect++;
+            else if (sp > n)
+                abundant++;
+        }
+        print(u"Deficient = "_S + deficient);
+        print(u"Perfect   = "_S + perfect);
+        print(u"Abundant  = "_S + abundant);
+    }
+} code_block_1;
+
+
+// https://www.rosettacode.org/wiki/Amb#Nim
+F amb(comp, options, prev = ‘’) -> [String]
+   I options.empty
+      R []
+
+   L(opt) options[0]
+      // If this is the base call, prev is empty and we need to continue.
+      I prev != ‘’ & !comp(prev, opt)
+         L.continue
+
+      // Take care of the case where we have no options left.
+      I options.len == 1
+         R [opt]
+
+      // Traverse into the tree.
+      V res = amb(comp, options[1..], opt)
+
+      // If it was a failure, try the next one.
+      if !res.empty
+         R opt [+] res // We have a match
+
+   R []
+
+V sets = [[‘the’, ‘that’, ‘a’],
+          [‘frog’, ‘elephant’, ‘thing’],
+          [‘walked’, ‘treaded’, ‘grows’],
+          [‘slowly’, ‘quickly’]]
+
+V result = amb((s, t) -> s.last == t[0], sets)
+print(result.join(‘ ’))
+===
+template <typename T1, typename T2, typename T3 = decltype(u""_S)> Array<String> amb(const T1 &comp, const T2 &options, const T3 &prev = u""_S)
+{
+    if (options.empty())
+        return Array<String>();
+
+    for (auto &&opt : _get<0>(options)) {
+        if (prev != u"" && !comp(prev, opt))
+            continue;
+        if (options.len() == 1)
+            return create_array({opt});
+        auto res = amb(comp, options[range_ei(1)], opt);
+        if (!res.empty())
+            return opt + res;
+    }
+    return Array<String>();
+}
+auto sets = create_array({create_array({u"the"_S, u"that"_S, u"a"_S}), create_array({u"frog"_S, u"elephant"_S, u"thing"_S}), create_array({u"walked"_S, u"treaded"_S, u"grows"_S}), create_array({u"slowly"_S, u"quickly"_S})});
+auto result = amb([](const auto &s, const auto &t){return s.last() == _get<0>(t);}, sets);
+
+struct CodeBlock1
+{
+    CodeBlock1()
+    {
+        print(result.join(u" "_S));
+    }
+} code_block_1;
+
+
+// https://www.rosettacode.org/wiki/Amicable_pairs
+F sum_proper_divisors(n)
+   R I n < 2 {0} E sum((1 .. n I/ 2).filter(it -> (@n % it) == 0))
+
+L(n) 1..20000
+   V m = sum_proper_divisors(n)
+   I m > n & sum_proper_divisors(m) == n
+      print(n"\t"m)
+===
+template <typename T1> auto sum_proper_divisors(const T1 &n)
+{
+    return n < 2 ? 0 : sum(range_ee(1, idiv(n, 2)).filter([&n](const auto &it){return (mod(n, it)) == 0;}));
+}
+
+struct CodeBlock1
+{
+    CodeBlock1()
+    {
+
+        for (auto n : range_ee(1, 20000)) {
+            auto m = sum_proper_divisors(n);
+            if (m > n && sum_proper_divisors(m) == n)
+                print(n + u"\t"_S + m);
+        }
+    }
+} code_block_1;
+
+
+// https://www.rosettacode.org/wiki/Arithmetic/Integer#C
+V a = Int(input())
+V b = Int(input())
+
+print(‘a + b = ’(a + b))
+print(‘a - b = ’(a - b))
+print(‘a * b = ’(a * b))
+print(‘a / b = ’(a I/ b))
+print(‘a % b = ’(a % b))
+print(‘a ^ b = ’(a ^ b))
+===
+auto a = to_int(input());
+auto b = to_int(input());
+
+struct CodeBlock1
+{
+    CodeBlock1()
+    {
+        print(u"a + b = "_S + (a + b));
+        print(u"a - b = "_S + (a - b));
+        print(u"a * b = "_S + (a * b));
+        print(u"a / b = "_S + (idiv(a, b)));
+        print(u"a % b = "_S + (mod(a, b)));
+        print(u"a ^ b = "_S + (pow(a, b)));
+    }
+} code_block_1;
+
+
+// https://www.rosettacode.org/wiki/Averages/Pythagorean_means#Python
+F amean(num)
+   R sum(num)/Float(num.len)
+
+F gmean(num)
+   R product(num) ^ (1.0/num.len)
+
+F hmean(num)
+   return num.len / sum(num.map(n -> 1.0/n))
+
+V numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+print(amean(numbers))
+print(gmean(numbers))
+print(hmean(numbers))
+===
+template <typename T1> auto amean(const T1 &num)
+{
+    return sum(num) / to_float(num.len());
+}
+
+template <typename T1> auto gmean(const T1 &num)
+{
+    return pow(product(num), (1.0 / num.len()));
+}
+
+template <typename T1> auto hmean(const T1 &num)
+{
+    return num.len() / sum_map(num, [](const auto &n){return 1.0 / n;});
+}
+auto numbers = create_array({1, 2, 3, 4, 5, 6, 7, 8, 9, 10});
+
+struct CodeBlock1
+{
+    CodeBlock1()
+    {
+        print(amean(numbers));
+        print(gmean(numbers));
+        print(hmean(numbers));
+    }
+} code_block_1;
+
+
+// https://www.rosettacode.org/wiki/Binary_digits
+L(n) [0, 5, 50, 9000]
+   print(‘#4 = #.’.format(n, bin(n)))
+===
+struct CodeBlock1
+{
+    CodeBlock1()
+    {
+        for (auto &&n : create_array({0, 5, 50, 9000}))
+            print(u"#4 = #."_S.format(n, bin(n)));
+    }
+} code_block_1;
+
+
+// https://www.rosettacode.org/wiki/Bitwise_operations#Kotlin
+V x = 10
+V y = 2
+print(‘x       = ’x)
+print(‘y       = ’y)
+print(‘NOT x   = ’(-)x)
+print(‘x AND y = ’(x [&] y))
+print(‘x OR  y = ’(x [|] y))
+print(‘x XOR y = ’(x (+) y))
+print(‘x SHL y = ’(x << y))
+print(‘x SHR y = ’(x >> y))
+print(‘x ROL y = ’rotl(x, y))
+print(‘x ROR y = ’rotr(x, y))
+===
+auto x = 10;
+auto y = 2;
+
+struct CodeBlock1
+{
+    CodeBlock1()
+    {
+        print(u"x       = "_S + x);
+        print(u"y       = "_S + y);
+        print(u"NOT x   = "_S + ~x);
+        print(u"x AND y = "_S + (x & y));
+        print(u"x OR  y = "_S + (x | y));
+        print(u"x XOR y = "_S + (x ^ y));
+        print(u"x SHL y = "_S + (x << y));
+        print(u"x SHR y = "_S + (x >> y));
+        print(u"x ROL y = "_S + rotl(x, y));
+        print(u"x ROR y = "_S + rotr(x, y));
+    }
+} code_block_1;
+
+
+// https://www.rosettacode.org/wiki/Caesar_cipher
+F caesar(string, =key, decode = 0B)
+   I decode
+      key = 26 - key
+
+   V r = ‘ ’ * string.len
+   L(c) string
+      r[L.index] = S c
+                      ‘a’..‘z’
+                         Char(code' (c.code - ‘a’.code + key) % 26 + ‘a’.code)
+                      ‘A’..‘Z’
+                         Char(code' (c.code - ‘A’.code + key) % 26 + ‘A’.code)
+                      E
+                         c
+   R r
+
+V msg = ‘The quick brown fox jumped over the lazy dogs’
+print(msg)
+V enc = caesar(msg, 11)
+print(enc)
+print(caesar(enc, 11, decode' 1B))
+===
+template <typename T1, typename T2, typename T3 = decltype(false)> auto caesar(const T1 &string, T2 key, const T3 &decode = false)
+{
+    if (decode)
+        key = 26 - key;
+    auto r = u" "_S * string.len();
+    {int Lindex = 0;
+    for (auto &&c : string) {
+        r.set(Lindex, [&](const auto &a){return in(a, range_ee(u'a'_C, u'z'_C)) ? Char(mod((c.code - u'a'_C.code + key), 26) + u'a'_C.code) : in(a, range_ee(u'A'_C, u'Z'_C)) ? Char(mod((c.code - u'A'_C.code + key), 26) + u'A'_C.code) : c;}(c));
+        Lindex++;
+    }}
+    return r;
+}
+auto msg = u"The quick brown fox jumped over the lazy dogs"_S;
+
+struct CodeBlock1
+{
+    CodeBlock1()
+    {
+        print(msg);
+    }
+} code_block_1;
+auto enc = caesar(msg, 11);
+
+struct CodeBlock2
+{
+    CodeBlock2()
+    {
+        print(enc);
+        print(caesar(enc, 11, true));
+    }
+} code_block_2;
+
+
+// https://www.rosettacode.org/wiki/Carmichael_3_strong_pseudoprimes#D
+F mod_(n, m)
+   R ((n % m) + m) % m
+
+F is_prime(n)
+   I n C (2, 3)
+      R 1B
+   E I n < 2 | n % 2 == 0 | n % 3 == 0
+      R 0B
+   V div = 5
+   V inc = 2
+   L div ^ 2 <= n
+      I n % div == 0
+         R 0B
+      div += inc
+      inc = 6 - inc
+   R 1B
+
+L(p) 2 .< 62
+   I !is_prime(p)
+      L.continue
+   L(h3) 2 .< p
+      V g = h3 + p
+      L(d) 1 .< g
+         I (g * (p - 1)) % d != 0 | mod_(-p * p, h3) != d % h3
+            L.continue
+         V q = 1 + (p - 1) * g I/ d
+         I !is_prime(q)
+            L.continue
+         V r = 1 + (p * q I/ h3)
+         I !is_prime(r) | (q * r) % (p - 1) != 1
+            L.continue
+         print(p‘ x ’q‘ x ’r)
+===
+template <typename T1, typename T2> auto mod_(const T1 &n, const T2 &m)
+{
+    return mod(((mod(n, m)) + m), m);
+}
+
+template <typename T1> auto is_prime(const T1 &n)
+{
+    if (in(n, make_tuple(2, 3)))
+        return true;
+    else if (n < 2 || mod(n, 2) == 0 || mod(n, 3) == 0)
+        return false;
+    auto div = 5;
+    auto inc = 2;
+    while (square(div) <= n) {
+        if (mod(n, div) == 0)
+            return false;
+        div += inc;
+        inc = 6 - inc;
+    }
+    return true;
+}
+
+struct CodeBlock1
+{
+    CodeBlock1()
+    {
+
+        for (auto p : range_el(2, 62)) {
+            if (!is_prime(p))
+                continue;
+            for (auto h3 : range_el(2, p)) {
+                auto g = h3 + p;
+                for (auto d : range_el(1, g)) {
+                    if (mod((g * (p - 1)), d) != 0 || mod_(-p * p, h3) != mod(d, h3))
+                        continue;
+                    auto q = 1 + idiv((p - 1) * g, d);
+                    if (!is_prime(q))
+                        continue;
+                    auto r = 1 + (idiv(p * q, h3));
+                    if (!is_prime(r) || mod((q * r), (p - 1)) != 1)
+                        continue;
+                    print(p + u" x "_S + q + u" x "_S + r);
+                }
+            }
+        }
+    }
+} code_block_1;
+
+
+// https://www.rosettacode.org/wiki/Combinations#D
+F comb(arr, k)
+   I k == 0
+      R [[Int]()]
+
+   [[Int]] result
+   L(x) arr
+      V i = L.index
+      L(suffix) comb(arr[i+1..], k-1)
+         result [+]= x [+] suffix
+
+   R result
+
+print(comb([0, 1, 2, 3, 4], 3))
+===
+template <typename T1, typename T2> auto comb(const T1 &arr, const T2 &k)
+{
+    if (k == 0)
+        return create_array({Array<int>()});
+    Array<Array<int>> result;
+    {int Lindex = 0;
+    for (auto &&x : arr) {
+        auto i = Lindex;
+        for (auto &&suffix : comb(arr[range_ei(i + 1)], k - 1))
+            result.append(x + suffix);
+        Lindex++;
+    }}
+    return result;
+}
+
+struct CodeBlock1
+{
+    CodeBlock1()
+    {
+        print(comb(create_array({0, 1, 2, 3, 4}), 3));
+    }
+} code_block_1;
+
+
+// https://www.rosettacode.org/wiki/Comma_quibbling
+F quibble(words)
+   R S words.len
+      0
+         ‘{}’
+      1
+         ‘{’words[0]‘}’
+      E
+         ‘{’words[0.<(len)-1].join(‘, ’)‘ and ’words.last‘}’
+
+print(quibble([‘’] * 0))
+print(quibble([‘ABC’]))
+print(quibble([‘ABC’, ‘DEF’]))
+print(quibble([‘ABC’, ‘DEF’, ‘G’, ‘H’]))
+===
+template <typename T1> auto quibble(const T1 &words)
+{
+    return [&](const auto &a){return a == 0 ? u"{}"_S : a == 1 ? u"{"_S + _get<0>(words) + u"}"_S : u"{"_S + words[range_e_llen(0,  - 1)].join(u", "_S) + u" and "_S + words.last() + u"}"_S;}(words.len());
+}
+
+struct CodeBlock1
+{
+    CodeBlock1()
+    {
+        print(quibble(create_array({u""_S}) * 0));
+        print(quibble(create_array({u"ABC"_S})));
+        print(quibble(create_array({u"ABC"_S, u"DEF"_S})));
+        print(quibble(create_array({u"ABC"_S, u"DEF"_S, u"G"_S, u"H"_S})));
+    }
+} code_block_1;
+
+
+// https://www.rosettacode.org/wiki/Command-line_arguments
+:start:
+print(‘Program name: ’:argv[0])
+print("Arguments:\n":argv[1..].join("\n"))
+===
+Array<String> argv;
+
+int MAIN_WITH_ARGV()
+{
+    INIT_ARGV();
+
+    print(u"Program name: "_S + _get<0>(::argv));
+    print(u"Arguments:\n"_S + ::argv[range_ei(1)].join(u"\n"_S));
+}
+
+
+// https://www.rosettacode.org/wiki/Constrained_random_points_on_a_circle#Julia
+F print_circle(lo, hi, ndots)
+   V canvas = [[0B] * (2*hi+1)] * (2*hi+1)
+   V i = 0
+   L i < ndots
+      V x = random:(-hi..hi)
+      V y = random:(-hi..hi)
+      I x^2 + y^2 C lo^2 .. hi^2
+         canvas[x + hi][y + hi] = 1B
+         i++
+
+   L(i) 0 .. 2*hi
+      print(canvas[i].map(j -> I j {‘♦ ’} E ‘  ’).join(‘’))
+
+print_circle(10, 15, 100)
+===
+template <typename T1, typename T2, typename T3> auto print_circle(const T1 &lo, const T2 &hi, const T3 &ndots)
+{
+    auto canvas = create_array({create_array({false}) * (2 * hi + 1)}) * (2 * hi + 1);
+    auto i = 0;
+    while (i < ndots) {
+        auto x = randomns::_(range_ee(-hi, hi));
+        auto y = randomns::_(range_ee(-hi, hi));
+        if (in(square(x) + square(y), range_ee(square(lo), square(hi)))) {
+            canvas[x + hi].set(y + hi, true);
+            i++;
+        }
+    }
+    for (auto i : range_ee(0, 2 * hi))
+        print(canvas[i].map([](const auto &j){return j ? u"♦ "_S : u"  "_S;}).join(u""_S));
+}
+
+struct CodeBlock1
+{
+    CodeBlock1()
+    {
+        print_circle(10, 15, 100);
+    }
+} code_block_1;
+
+
+// https://www.rosettacode.org/wiki/Conway%27s_Game_of_Life
+V cellcountx = 6
+V cellcounty = 5
+V celltable = [(1, 2) = 1,
+               (1, 3) = 1,
+               (0, 3) = 1]
+DefaultDict[(Int, Int), Int] universe
+universe[(1, 1)] = 1
+universe[(2, 1)] = 1
+universe[(3, 1)] = 1
+universe[(1, 4)] = 1
+universe[(2, 4)] = 1
+universe[(3, 4)] = 1
+
+L(i) 4
+   print("\nGeneration "i‘:’)
+   L(row) 0 .< cellcounty
+      print(‘  ’(0 .< cellcountx).map(col -> [‘. ’, ‘O ’][:universe[(@row, col)]]).join(‘’))
+
+   DefaultDict[(Int, Int), Int] nextgeneration
+   L(row) 0 .< cellcounty
+      L(col) 0 .< cellcountx
+         nextgeneration[(row, col)] = celltable.get(
+              (universe[(row, col)],
+              -universe[(row, col)] + sum(multiloop(row-1..row+1,
+                                                    col-1..col+1, (r, c) -> :universe[(r, c)]))
+              ), 0)
+   universe = nextgeneration
+===
+auto cellcountx = 6;
+auto cellcounty = 5;
+auto celltable = create_dict(dict_of(make_tuple(1, 2), 1)(make_tuple(1, 3), 1)(make_tuple(0, 3), 1));
+DefaultDict<ivec2, int> universe;
+
+struct CodeBlock1
+{
+    CodeBlock1()
+    {
+        universe.set(make_tuple(1, 1), 1);
+        universe.set(make_tuple(2, 1), 1);
+        universe.set(make_tuple(3, 1), 1);
+        universe.set(make_tuple(1, 4), 1);
+        universe.set(make_tuple(2, 4), 1);
+        universe.set(make_tuple(3, 4), 1);
+
+        for (int i = 0; i < 4; i++) {
+            print(u"\nGeneration "_S + i + u":"_S);
+            for (auto row : range_el(0, cellcounty))
+                print(u"  "_S + range_el(0, cellcountx).map([&row](const auto &col){return create_array({u". "_S, u"O "_S})[::universe[make_tuple(row, col)]];}).join(u""_S));
+            DefaultDict<ivec2, int> nextgeneration;
+            for (auto row : range_el(0, cellcounty))
+                for (auto col : range_el(0, cellcountx))
+                    nextgeneration.set(make_tuple(row, col), celltable.get(make_tuple(universe[make_tuple(row, col)], -universe[make_tuple(row, col)] + sum(multiloop(range_ee(row - 1, row + 1), range_ee(col - 1, col + 1), [](const auto &r, const auto &c){return ::universe[make_tuple(r, c)];}))), 0));
+            universe = nextgeneration;
+        }
+    }
+} code_block_1;
+
+
+// https://www.rosettacode.org/wiki/Conway%27s_Game_of_Life#More_optimal_solution
+V cellcountx = 6
+V cellcounty = 5
+V universe = [[0B] * cellcountx] * cellcounty
+universe[1][1] = 1B
+universe[2][1] = 1B
+universe[3][1] = 1B
+universe[1][4] = 1B
+universe[2][4] = 1B
+universe[3][4] = 1B
+V nextgeneration = [[0B] * cellcountx] * cellcounty
+
+L(i) 4
+   print("\nGeneration "i‘:’)
+   L(row) 0 .< cellcounty
+      print(‘  ’, end' ‘’)
+      L(col) 0 .< cellcountx
+         print(I universe[row][col] {‘O ’} E ‘. ’, end' ‘’)
+      print()
+
+   L(row) 0 .< cellcounty
+      L(col) 0 .< cellcountx
+         V s = 0
+         I row > 0
+            s = universe[row-1][col]
+            I col > 0
+               s += universe[row-1][col-1]
+            I col < cellcountx-1
+               s += universe[row-1][col+1]
+         I col > 0
+            s += universe[row][col-1]
+         I col < cellcountx-1
+            s += universe[row][col+1]
+         I row < cellcounty-1
+            s += universe[row+1][col]
+            I col > 0
+               s += universe[row+1][col-1]
+            I col < cellcountx-1
+               s += universe[row+1][col+1]
+         nextgeneration[row][col] = I universe[row][col] {s C 2..3} E s == 3
+   universe = nextgeneration
+===
+auto cellcountx = 6;
+auto cellcounty = 5;
+auto universe = create_array({create_array({false}) * cellcountx}) * cellcounty;
+
+struct CodeBlock1
+{
+    CodeBlock1()
+    {
+        _set<1>(_get<1>(universe), true);
+        _set<1>(_get<2>(universe), true);
+        _set<1>(_get<3>(universe), true);
+        _set<4>(_get<1>(universe), true);
+        _set<4>(_get<2>(universe), true);
+        _set<4>(_get<3>(universe), true);
+    }
+} code_block_1;
+auto nextgeneration = create_array({create_array({false}) * cellcountx}) * cellcounty;
+
+struct CodeBlock2
+{
+    CodeBlock2()
+    {
+
+        for (int i = 0; i < 4; i++) {
+            print(u"\nGeneration "_S + i + u":"_S);
+            for (auto row : range_el(0, cellcounty)) {
+                print(u"  "_S, u""_S);
+                for (auto col : range_el(0, cellcountx))
+                    print(universe[row][col] ? u"O "_S : u". "_S, u""_S);
+                print();
+            }
+            for (auto row : range_el(0, cellcounty))
+                for (auto col : range_el(0, cellcountx)) {
+                    auto s = 0;
+                    if (row > 0) {
+                        s = universe[row - 1][col];
+                        if (col > 0)
+                            s += universe[row - 1][col - 1];
+                        if (col < cellcountx - 1)
+                            s += universe[row - 1][col + 1];
+                    }
+                    if (col > 0)
+                        s += universe[row][col - 1];
+                    if (col < cellcountx - 1)
+                        s += universe[row][col + 1];
+                    if (row < cellcounty - 1) {
+                        s += universe[row + 1][col];
+                        if (col > 0)
+                            s += universe[row + 1][col - 1];
+                        if (col < cellcountx - 1)
+                            s += universe[row + 1][col + 1];
+                    }
+                    nextgeneration[row].set(col, universe[row][col] ? in(s, range_ee(2, 3)) : s == 3);
+                }
+            universe = nextgeneration;
+        }
+    }
+} code_block_2;
+
+
+// https://www.rosettacode.org/wiki/Count_in_factors#C.2B.2B
+F get_prime_factors(=li)
+   I li == 1
+      R ‘1’
+   E
+      V res = ‘’
+      V f = 2
+      L
+         I li % f == 0
+            res ‘’= f
+            li /= f
+            I li == 1
+               L.break
+            res ‘’= ‘ x ’
+         E
+            f++
+      R res
+
+L(x) 1..17
+   print(‘#4: #.’.format(x, get_prime_factors(x)))
+print(‘2144: ’get_prime_factors(2144))
+===
+template <typename T1> auto get_prime_factors(T1 li)
+{
+    if (li == 1)
+        return u"1"_S;
+    else {
+        auto res = u""_S;
+        auto f = 2;
+        while (true)
+            if (mod(li, f) == 0) {
+                res += f;
+                li /= f;
+                if (li == 1)
+                    break;
+                res += u" x "_S;
+            }
+            else
+                f++;
+        return res;
+    }
+}
+
+struct CodeBlock1
+{
+    CodeBlock1()
+    {
+        for (auto x : range_ee(1, 17))
+            print(u"#4: #."_S.format(x, get_prime_factors(x)));
+        print(u"2144: "_S + get_prime_factors(2144));
+    }
+} code_block_1;
+
+
+// https://www.rosettacode.org/wiki/Count_occurrences_of_a_substring
+print(‘the three truths’.count(‘th’))
+print(‘ababababab’.count(‘abab’))
+===
+struct CodeBlock1
+{
+    CodeBlock1()
+    {
+        print(u"the three truths"_S.count(u"th"_S));
+        print(u"ababababab"_S.count(u"abab"_S));
+    }
+} code_block_1;
+
+
+// https://www.rosettacode.org/wiki/Create_a_two-dimensional_array_at_runtime#Python
+V width = 3
+V height = 5
+V myarray = [[0] * width] * height
+print(myarray[height-1][width-1])
+===
+auto width = 3;
+auto height = 5;
+auto myarray = create_array({create_array({0}) * width}) * height;
+
+struct CodeBlock1
+{
+    CodeBlock1()
+    {
+        print(myarray[height - 1][width - 1]);
+    }
+} code_block_1;
+
+
+// https://www.rosettacode.org/wiki/Benford%27s_law#D
+F get_fibs()
+   V a = 1.0
+   V b = 1.0
+   [Float] r
+   L 1000
+      r [+]= a
+      (a, b) = (b, a + b)
+   R r
+
+F benford(seq)
+   V freqs = [(0.0, 0.0)] * 9
+   V seq_len = 0
+   L(d) seq
+      I d != 0
+         freqs[String(d)[0].code - ‘1’.code][1]++
+         seq_len++
+
+   L(&f) freqs
+      f = (log10(1.0 + 1.0 / (L.index + 1)), f[1] / seq_len)
+   R freqs
+
+print(‘#9 #9 #9’.format(‘Actual’, ‘Expected’, ‘Deviation’))
+
+L(p) benford(get_fibs())
+   print(‘#.: #2.2% | #2.2% | #0.4%’.format(L.index + 1, p[1] * 100, p[0] * 100, abs(p[1] - p[0]) * 100))
+===
+auto get_fibs()
+{
+    auto a = 1.0;
+    auto b = 1.0;
+    Array<double> r;
+    for (int Lindex = 0; Lindex < 1000; Lindex++) {
+        r.append(a);
+        assign_from_tuple(a, b, make_tuple(b, a + b));
+    }
+    return r;
+}
+
+template <typename T1> auto benford(const T1 &seq)
+{
+    auto freqs = create_array({make_tuple(0.0, 0.0)}) * 9;
+    auto seq_len = 0;
+    for (auto &&d : seq)
+        if (d != 0) {
+            _get<1>(freqs[_get<0>(String(d)).code - u'1'_C.code])++;
+            seq_len++;
+        }
+    {int Lindex = 0;
+
+    for (auto &f : freqs) {
+        f = make_tuple(log10(1.0 + 1.0 / (Lindex + 1)), _get<1>(f) / seq_len);
+        Lindex++;
+    }}
+    return freqs;
+}
+
+struct CodeBlock1
+{
+    CodeBlock1()
+    {
+        print(u"#9 #9 #9"_S.format(u"Actual"_S, u"Expected"_S, u"Deviation"_S));
+        {int Lindex = 0;
+
+        for (auto &&p : benford(get_fibs())) {
+            print(u"#.: #2.2% | #2.2% | #0.4%"_S.format(Lindex + 1, _get<1>(p) * 100, _get<0>(p) * 100, abs(_get<1>(p) - _get<0>(p)) * 100));
+            Lindex++;
+        }}
+    }
+} code_block_1;
+
+
+// https://www.rosettacode.org/wiki/CSV_data_manipulation#Nim
+L(=line) File(‘data.csv’).read_lines()
+   I L.index == 0
+      line ‘’= ‘,SUM’
+   E
+      line ‘’= ‘,’sum(line.split(‘,’).map(i -> Int(i)))
+   print(line)
+===
+struct CodeBlock1
+{
+    CodeBlock1()
+    {
+        {int Lindex = 0;
+        for (auto line : File(u"data.csv"_S).read_lines()) {
+            if (Lindex == 0)
+                line += u",SUM"_S;
+            else
+                line += u","_S + sum_map(line.split(u","_S), [](const auto &i){return to_int(i);});
+            print(line);
+            Lindex++;
+        }}
+    }
+} code_block_1;
+
+
+// https://www.rosettacode.org/wiki/CSV_to_HTML_translation#C
+V input_csv = ‘Character,Speech
+The multitude,The messiah! Show us the messiah!
+Brians mother,<angry>Now you listen here! He's not the messiah; he's a very naughty boy! Now go away!</angry>
+The multitude,Who are you?
+Brians mother,I'm his mother; that's who!
+The multitude,Behold his mother! Behold his mother!’
+
+print("<table>\n<tr><td>", end' ‘’)
+
+L(c) input_csv
+   print(S c {
+            "\n"{"</td></tr>\n<tr><td>"}
+            ‘,’ {‘</td><td>’}
+            ‘<’ {‘&lt;’}
+            ‘>’ {‘&gt;’}
+            ‘&’ {‘&amp;’}
+            E   {c}
+   }, end' ‘’)
+
+print("</td></tr>\n</table>")
+===
+auto input_csv = uR"(Character,Speech
+The multitude,The messiah! Show us the messiah!
+Brians mother,<angry>Now you listen here! He's not the messiah; he's a very naughty boy! Now go away!</angry>
+The multitude,Who are you?
+Brians mother,I'm his mother; that's who!
+The multitude,Behold his mother! Behold his mother!)"_S;
+
+struct CodeBlock1
+{
+    CodeBlock1()
+    {
+        print(u"<table>\n<tr><td>"_S, u""_S);
+        for (auto &&c : input_csv)
+            print([&](const auto &a){return a == u'\n' ? u"</td></tr>\n<tr><td>"_S : a == u',' ? u"</td><td>"_S : a == u'<' ? u"&lt;"_S : a == u'>' ? u"&gt;"_S : a == u'&' ? u"&amp;"_S : c;}(c), u""_S);
+        print(u"</td></tr>\n</table>"_S);
+    }
+} code_block_1;
+
+
+// https://www.rosettacode.org/wiki/Cycle_detection#D
+F brent(f, x0)
+   Int cycle_length
+   V hare = x0
+   V power = 1
+   L
+      V tortoise = hare
+      L(i) 1..power
+         hare = f(hare)
+         I tortoise == hare
+            cycle_length = i
+            ^L.break
+      power *= 2
+
+   hare = x0
+   L 1..cycle_length
+      hare = f(hare)
+
+   V cycle_start = 0
+   V tortoise = x0
+   L tortoise != hare
+      tortoise = f(tortoise)
+      hare = f(hare)
+      cycle_start++
+
+   print_result(x0, f, cycle_length, cycle_start)
+
+F print_result(x0, f, len, start)
+   print(‘Cycle length = ’len)
+   print(‘Start index = ’start)
+   V i = x0
+   L 1..start
+      i = f(i)
+   V cycle = [0] * len
+   L 0.<len
+      cycle[L.index] = i
+      i = f(i)
+   print(‘Cycle: ’, end' ‘’)
+   print(cycle)
+
+brent(i -> (i * i + 1) % 255, 3)
+===
+template <typename T1, typename T2> auto brent(const T1 &f, const T2 &x0)
+{
+    int cycle_length;
+    auto hare = x0;
+    auto power = 1;
+    while (true) {
+        auto tortoise = hare;
+        for (auto i : range_ee(1, power)) {
+            hare = f(hare);
+            if (tortoise == hare) {
+                cycle_length = i;
+                goto break_;
+            }
+        }
+        power *= 2;
+    }
+    break_:;
+    hare = x0;
+    for (auto __unused : range_ee(1, cycle_length))
+        hare = f(hare);
+    auto cycle_start = 0;
+    auto tortoise = x0;
+    while (tortoise != hare) {
+        tortoise = f(tortoise);
+        hare = f(hare);
+        cycle_start++;
+    }
+    print_result(x0, f, cycle_length, cycle_start);
+}
+
+template <typename T1, typename T2, typename T3, typename T4> auto print_result(const T1 &x0, const T2 &f, const T3 &len, const T4 &start)
+{
+    print(u"Cycle length = "_S + len);
+    print(u"Start index = "_S + start);
+    auto i = x0;
+    for (auto __unused : range_ee(1, start))
+        i = f(i);
+    auto cycle = create_array({0}) * len;
+    {int Lindex = 0;
+    for (auto __unused : range_el(0, len)) {
+        cycle.set(Lindex, i);
+        i = f(i);
+        Lindex++;
+    }}
+    print(u"Cycle: "_S, u""_S);
+    print(cycle);
+}
+
+struct CodeBlock1
+{
+    CodeBlock1()
+    {
+        brent([](const auto &i){return mod((i * i + 1), 255);}, 3);
+    }
+} code_block_1;
+
+
+// https://www.rosettacode.org/wiki/Date_format#C
+print(Time().format(‘YYYY-MM-DD’))
+print(Time().strftime(‘%A, %B %e, %Y’))
+===
+struct CodeBlock1
+{
+    CodeBlock1()
+    {
+        print(Time().format(u"YYYY-MM-DD"_S));
+        print(Time().strftime(u"%A, %B %e, %Y"_S));
+    }
+} code_block_1;
+
+
+// https://www.rosettacode.org/wiki/Date_manipulation#Python
+V format_str = ‘%B %d %Y %I:%M%p’
+print((time:strptime(‘March 7 2009 7:30pm’, format_str)
+     + TimeDelta(hours' 12)).strftime(format_str))
+===
+auto format_str = u"%B %d %Y %I:%M%p"_S;
+
+struct CodeBlock1
+{
+    CodeBlock1()
+    {
+        print((timens::strptime(u"March 7 2009 7:30pm"_S, format_str) + TimeDelta(0, 12)).strftime(format_str));
+    }
+} code_block_1;
+
+
+// https://www.rosettacode.org/wiki/Day_of_the_week
+print((2008..2121).filter(y -> Time(y, 12, 25).strftime(‘%w’) == ‘0’)) // Warning: this code does not work in MSVC 2017 and MSVC 2019! But this works: `V fmt = ‘%w’; print((2008..2121).filter(y -> Time(y, 12, 25).strftime(:fmt) == ‘0’))`
+===
+struct CodeBlock1
+{
+    CodeBlock1()
+    {
+        print(range_ee(2008, 2121).filter([](const auto &y){return Time(y, 12, 25).strftime(u"%w"_S) == u'0';}));
+    }
+} code_block_1;
+
+
+// https://www.rosettacode.org/wiki/Deconvolution/1D#D
+F deconv(g, f)
+   V result = [0]*(g.len - f.len + 1)
+   L(&e) result
+      V n = L.index
+      e = g[n]
+      V lower_bound = I n >= f.len {n - f.len + 1} E 0
+      L(i) lower_bound .< n
+         e -= result[i] * f[n - i]
+      e /= f[0]
+   R result
+
+V h = [-8,-9,-3,-1,-6,7]
+V f = [-3,-6,-1,8,-6,3,-1,-9,-9,3,-2,5,2,-2,-7,-1]
+V g = [24,75,71,-34,3,22,-45,23,245,25,52,25,-67,-96,96,31,55,36,29,-43,-7]
+print(deconv(g, f))
+print(deconv(g, h))
+===
+template <typename T1, typename T2> auto deconv(const T1 &g, const T2 &f)
+{
+    auto result = create_array({0}) * (g.len() - f.len() + 1);
+    {int Lindex = 0;
+    for (auto &e : result) {
+        auto n = Lindex;
+        e = g[n];
+        auto lower_bound = n >= f.len() ? n - f.len() + 1 : 0;
+        for (auto i : range_el(lower_bound, n))
+            e -= result[i] * f[n - i];
+        e /= _get<0>(f);
+        Lindex++;
+    }}
+    return result;
+}
+auto h = create_array({-8, -9, -3, -1, -6, 7});
+auto f = create_array({-3, -6, -1, 8, -6, 3, -1, -9, -9, 3, -2, 5, 2, -2, -7, -1});
+auto g = create_array({24, 75, 71, -34, 3, 22, -45, 23, 245, 25, 52, 25, -67, -96, 96, 31, 55, 36, 29, -43, -7});
+
+struct CodeBlock1
+{
+    CodeBlock1()
+    {
+        print(deconv(g, f));
+        print(deconv(g, h));
+    }
+} code_block_1;
+
+
+// https://www.rosettacode.org/wiki/Department_Numbers#C
+print(‘Police     Sanitation         Fire’)
+print(‘----------------------------------’)
+
+L(police) (2..6).step(2)
+   L(sanitation) 1..7
+      L(fire) 1..7
+         I police!=sanitation & sanitation!=fire & fire!=police & police+fire+sanitation==12
+            print(police"\t\t"sanitation"\t\t"fire)
+===
+struct CodeBlock1
+{
+    CodeBlock1()
+    {
+        print(u"Police     Sanitation         Fire"_S);
+        print(u"----------------------------------"_S);
+        for (auto police : range_ee(2, 6).step(2))
+            for (auto sanitation : range_ee(1, 7))
+                for (auto fire : range_ee(1, 7))
+                    if (police != sanitation && sanitation != fire && fire != police && police + fire + sanitation == 12)
+                        print(police + u"\t\t"_S + sanitation + u"\t\t"_S + fire);
+    }
+} code_block_1;
+
+
+// https://www.rosettacode.org/wiki/Dice_game_probabilities#C
+F throw_die(n_sides, n_dice, s, [Int] &counts)
+   I n_dice == 0
+      counts[s]++
+      R
+   L(i) 1..n_sides
+      throw_die(n_sides, n_dice - 1, s + i, &counts)
+
+F beating_probability(n_sides1, n_dice1,
+                      n_sides2, n_dice2)
+   V len1 = (n_sides1 + 1) * n_dice1
+   V C1 = [0] * len1
+   throw_die(n_sides1, n_dice1, 0, &C1)
+
+   V len2 = (n_sides2 + 1) * n_dice2
+   V C2 = [0] * len2
+   throw_die(n_sides2, n_dice2, 0, &C2)
+
+   Float p12 = (n_sides1 ^ n_dice1) * (n_sides2 ^ n_dice2)
+
+   V tot = 0.0
+   L(i) 0 .< len1
+      L(j) 0 .< min(i, len2)
+         tot += Float(C1[i]) * C2[j] / p12
+   R tot
+
+print(‘#.16’.format(beating_probability(4, 9, 6, 6)))
+print(‘#.16’.format(beating_probability(10, 5, 7, 6)))
+===
+template <typename T1, typename T2, typename T3> auto throw_die(const T1 &n_sides, const T2 &n_dice, const T3 &s, Array<int> &counts)
+{
+    if (n_dice == 0) {
+        counts[s]++;
+        return;
+    }
+    for (auto i : range_ee(1, n_sides))
+        throw_die(n_sides, n_dice - 1, s + i, counts);
+}
+
+template <typename T1, typename T2, typename T3, typename T4> auto beating_probability(const T1 &n_sides1, const T2 &n_dice1, const T3 &n_sides2, const T4 &n_dice2)
+{
+    auto len1 = (n_sides1 + 1) * n_dice1;
+    auto C1 = create_array({0}) * len1;
+    throw_die(n_sides1, n_dice1, 0, C1);
+    auto len2 = (n_sides2 + 1) * n_dice2;
+    auto C2 = create_array({0}) * len2;
+    throw_die(n_sides2, n_dice2, 0, C2);
+    double p12 = (pow(n_sides1, n_dice1)) * (pow(n_sides2, n_dice2));
+    auto tot = 0.0;
+    for (auto i : range_el(0, len1))
+        for (auto j : range_el(0, min(i, len2)))
+            tot += to_float(C1[i]) * C2[j] / p12;
+    return tot;
+}
+
+struct CodeBlock1
+{
+    CodeBlock1()
+    {
+        print(u"#.16"_S.format(beating_probability(4, 9, 6, 6)));
+        print(u"#.16"_S.format(beating_probability(10, 5, 7, 6)));
+    }
+} code_block_1;
+
+
+// https://www.rosettacode.org/wiki/Diversity_prediction_theorem#C.2B.2B
+F average_square_diff(a, predictions)
+   R sum(predictions.map(x -> (x - @a) ^ 2)) / predictions.len
+
+F diversity_theorem(truth, predictions)
+   V average = sum(predictions) / predictions.len
+   print(‘average-error: ’average_square_diff(truth, predictions)"\n"‘’
+         ‘crowd-error:   ’((truth - average) ^ 2)"\n"‘’
+         ‘diversity:     ’average_square_diff(average, predictions))
+
+diversity_theorem(49.0, [Float(48), 47, 51])
+diversity_theorem(49.0, [Float(48), 47, 51, 42])
+===
+template <typename T1, typename T2> auto average_square_diff(const T1 &a, const T2 &predictions)
+{
+    return sum_map(predictions, [&a](const auto &x){return square((x - a));}) / predictions.len();
+}
+
+template <typename T1, typename T2> auto diversity_theorem(const T1 &truth, const T2 &predictions)
+{
+    auto average = sum(predictions) / predictions.len();
+    print(u"average-error: "_S + average_square_diff(truth, predictions) + u"\n"_S + u"crowd-error:   "_S + (square((truth - average))) + u"\n"_S + u"diversity:     "_S + average_square_diff(average, predictions));
+}
+
+struct CodeBlock1
+{
+    CodeBlock1()
+    {
+        diversity_theorem(49.0, create_array<double>({to_float(48), 47, 51}));
+        diversity_theorem(49.0, create_array<double>({to_float(48), 47, 51, 42}));
+    }
+} code_block_1;
+
+
+// https://www.rosettacode.org/wiki/Dot_product
+print(dot((1,  3, -5), (4, -2, -1)))
+===
+struct CodeBlock1
+{
+    CodeBlock1()
+    {
+        print(dot(make_tuple(1, 3, -5), make_tuple(4, -2, -1)));
+    }
+} code_block_1;
+
+
+// https://www.rosettacode.org/wiki/Angle_difference_between_two_bearings#Python
+F get_difference(b1, b2)
+   R wrap(b2 - b1, -180.0, 180.0)
+
+print(get_difference( 20.0, 45.0))
+print(get_difference(-45.0, 45.0))
+print(get_difference(-85.0, 90.0))
+print(get_difference(-95.0, 90.0))
+print(get_difference(-45.0, 125.0))
+print(get_difference(-45.0, 145.0))
+print(get_difference(-45.0, 125.0))
+print(get_difference(-45.0, 145.0))
+print(get_difference(29.4803, -88.6381))
+print(get_difference(-78.3251, -159.036))
+print(‘’)
+print(get_difference(-70099.74233810938, 29840.67437876723))
+print(get_difference(-165313.6666297357, 33693.9894517456))
+print(get_difference(1174.8380510598456, -154146.66490124757))
+print(get_difference(60175.77306795546, 42213.07192354373))
+===
+template <typename T1, typename T2> auto get_difference(const T1 &b1, const T2 &b2)
+{
+    return wrap(b2 - b1, -180.0, 180.0);
+}
+
+struct CodeBlock1
+{
+    CodeBlock1()
+    {
+        print(get_difference(20.0, 45.0));
+        print(get_difference(-45.0, 45.0));
+        print(get_difference(-85.0, 90.0));
+        print(get_difference(-95.0, 90.0));
+        print(get_difference(-45.0, 125.0));
+        print(get_difference(-45.0, 145.0));
+        print(get_difference(-45.0, 125.0));
+        print(get_difference(-45.0, 145.0));
+        print(get_difference(29.4803, -88.6381));
+        print(get_difference(-78.3251, -159.036));
+        print(u""_S);
+        print(get_difference(-70099.74233810938, 29840.67437876723));
+        print(get_difference(-165313.6666297357, 33693.9894517456));
+        print(get_difference(1174.8380510598456, -154146.66490124757));
+        print(get_difference(60175.77306795546, 42213.07192354373));
+    }
+} code_block_1;
+
+
+// https://www.rosettacode.org/wiki/Factorial#Python
+F factorial(n)
+   V result = 1
+   L(i) 2..n
+      result *= i
+   R result
+
+L(n) 0..5
+   print(n‘ ’factorial(n))
+===
+template <typename T1> auto factorial(const T1 &n)
+{
+    auto result = 1;
+    for (auto i : range_ee(2, n))
+        result *= i;
+    return result;
+}
+
+struct CodeBlock1
+{
+    CodeBlock1()
+    {
+        for (auto n : range_ee(0, 5))
+            print(n + u" "_S + factorial(n));
+    }
+} code_block_1;
+
+
+// https://www.rosettacode.org/wiki/Find_first_and_last_set_bit_of_a_long_integer#Python
+L(i) 6
+    V x = Int(42 ^ i)
+    print(‘#10 MSB: #2 LSB: #2’.format(x, bsr(x), bsf(x)))
+
+L(i) 6
+    V x = Int64(1302 ^ i)
+    print(‘#20 MSB: #2 LSB: #2’.format(x, bsr(x), bsf(x)))
+===
+struct CodeBlock1
+{
+    CodeBlock1()
+    {
+        for (int i = 0; i < 6; i++) {
+            auto x = to_int(pow(42, i));
+            print(u"#10 MSB: #2 LSB: #2"_S.format(x, bsr(x), bsf(x)));
+        }
+
+        for (int i = 0; i < 6; i++) {
+            auto x = to_int64(pow(1302, i));
+            print(u"#20 MSB: #2 LSB: #2"_S.format(x, bsr(x), bsf(x)));
+        }
+    }
+} code_block_1;
+
+
+// https://www.rosettacode.org/wiki/Find_the_intersection_of_a_line_with_a_plane#C.2B.2B
+F intersection_point(ray_direction, ray_point, plane_normal, plane_point)
+    return ray_point - ray_direction * dot(ray_point - plane_point, plane_normal) / dot(ray_direction, plane_normal)
+
+print(‘The ray intersects the plane at ’intersection_point((0.0, -1.0, -1.0), (0.0, 0.0, 10.0), (0.0, 0.0, 1.0), (0.0, 0.0, 5.0)))
+===
+template <typename T1, typename T2, typename T3, typename T4> auto intersection_point(const T1 &ray_direction, const T2 &ray_point, const T3 &plane_normal, const T4 &plane_point)
+{
+    return ray_point - ray_direction * dot(ray_point - plane_point, plane_normal) / dot(ray_direction, plane_normal);
+}
+
+struct CodeBlock1
+{
+    CodeBlock1()
+    {
+        print(u"The ray intersects the plane at "_S + intersection_point(make_tuple(0.0, -1.0, -1.0), make_tuple(0.0, 0.0, 10.0), make_tuple(0.0, 0.0, 1.0), make_tuple(0.0, 0.0, 5.0)));
+    }
+} code_block_1;
+
+
+// https://www.rosettacode.org/wiki/Find_the_last_Sunday_of_each_month
+F last_sundays(year)
+   [String] sundays
+   L(month) 1..12
+      V last_day_of_month = I month < 12 {Time(year, month + 1)} E Time(year + 1)
+      L
+         last_day_of_month -= TimeDelta(days' 1)
+         I last_day_of_month.strftime(‘%w’) == ‘0’
+            //sundays [+]= year‘-’String(month).zfill(2)‘-’last_day_of_month.strftime(‘%d’)
+            sundays [+]= year‘-’(‘#02’.format(month))‘-’last_day_of_month.strftime(‘%d’)
+            L.break
+   R sundays
+
+print(last_sundays(2013).join("\n"))
+===
+template <typename T1> auto last_sundays(const T1 &year)
+{
+    Array<String> sundays;
+    for (auto month : range_ee(1, 12)) {
+        auto last_day_of_month = month < 12 ? Time(year, month + 1) : Time(year + 1);
+        while (true) {
+            last_day_of_month -= TimeDelta(1);
+            if (last_day_of_month.strftime(u"%w"_S) == u'0') {
+                sundays.append(year + u"-"_S + (u"#02"_S.format(month)) + u"-"_S + last_day_of_month.strftime(u"%d"_S));
+                break;
+            }
+        }
+    }
+    return sundays;
+}
+
+struct CodeBlock1
+{
+    CodeBlock1()
+    {
+        print(last_sundays(2013).join(u"\n"_S));
+    }
+} code_block_1;
+
+
+// https://www.rosettacode.org/wiki/Gamma_function
+V _a = [  1.00000000000000000000,  0.57721566490153286061, -0.65587807152025388108,
+         -0.04200263503409523553,  0.16653861138229148950, -0.04219773455554433675,
+         -0.00962197152787697356,  0.00721894324666309954, -0.00116516759185906511,
+         -0.00021524167411495097,  0.00012805028238811619, -0.00002013485478078824,
+         -0.00000125049348214267,  0.00000113302723198170, -0.00000020563384169776,
+          0.00000000611609510448,  0.00000000500200764447, -0.00000000118127457049,
+          0.00000000010434267117,  0.00000000000778226344, -0.00000000000369680562,
+          0.00000000000051003703, -0.00000000000002058326, -0.00000000000000534812,
+          0.00000000000000122678, -0.00000000000000011813,  0.00000000000000000119,
+          0.00000000000000000141, -0.00000000000000000023,  0.00000000000000000002
+       ]
+F gamma(x)
+   V y = x - 1.0
+   V sm = :_a.last
+   L(n) (:_a.len-2 .. 0).step(-1)
+      sm = sm * y + :_a[n]
+   R 1.0 / sm
+
+L(i) 1..10
+   print(‘#.14’.format(gamma(i / 3.0)))
+===
+auto _a = create_array({1.00000000000000000000, 0.57721566490153286061, -0.65587807152025388108, -0.04200263503409523553, 0.16653861138229148950, -0.04219773455554433675, -0.00962197152787697356, 0.00721894324666309954, -0.00116516759185906511, -0.00021524167411495097, 0.00012805028238811619, -0.00002013485478078824, -0.00000125049348214267, 0.00000113302723198170, -0.00000020563384169776, 0.00000000611609510448, 0.00000000500200764447, -0.00000000118127457049, 0.00000000010434267117, 0.00000000000778226344, -0.00000000000369680562, 0.00000000000051003703, -0.00000000000002058326, -0.00000000000000534812, 0.00000000000000122678, -0.00000000000000011813, 0.00000000000000000119, 0.00000000000000000141, -0.00000000000000000023, 0.00000000000000000002});
+template <typename T1> auto gamma(const T1 &x)
+{
+    auto y = x - 1.0;
+    auto sm = ::_a.last();
+    for (auto n : range_ee(::_a.len() - 2, 0).step(-1))
+        sm = sm * y + ::_a[n];
+    return 1.0 / sm;
+}
+
+struct CodeBlock1
+{
+    CodeBlock1()
+    {
+        for (auto i : range_ee(1, 10))
+            print(u"#.14"_S.format(gamma(i / 3.0)));
+    }
+} code_block_1;
+
+
+// https://www.rosettacode.org/wiki/Gaussian_elimination#C
+F swap_row(&a, &b, r1, r2)
+   I r1 != r2
+      swap(&a[r1], &a[r2])
+      swap(&b[r1], &b[r2])
+
+F gauss_eliminate(&a, &b)
+   L(dia) 0 .< a.len
+      V (max_row, max) = (dia, a[dia][dia])
+      L(row) dia+1 .< a.len
+         V tmp = abs(a[row][dia])
+         I tmp > max
+            (max_row, max) = (row, tmp)
+
+      swap_row(&a, &b, dia, max_row)
+
+      L(row) dia+1 .< a.len
+         V tmp = a[row][dia] / a[dia][dia]
+         L(col) dia+1 .< a.len
+            a[row][col] -= tmp * a[dia][col]
+         a[row][dia] = 0
+         b[row] -= tmp * b[dia]
+
+   V r = [0.0] * a.len
+   L(row) (a.len-1 .. 0).step(-1)
+      V tmp = b[row]
+      L(j) (a.len-1 .< row).step(-1)
+         tmp -= r[j] * a[row][j]
+      r[row] = tmp / a[row][row]
+   R r
+
+V a = [[1.00, 0.00, 0.00,  0.00,  0.00, 0.00],
+       [1.00, 0.63, 0.39,  0.25,  0.16, 0.10],
+       [1.00, 1.26, 1.58,  1.98,  2.49, 3.13],
+       [1.00, 1.88, 3.55,  6.70, 12.62, 23.80],
+       [1.00, 2.51, 6.32, 15.88, 39.90, 100.28],
+       [1.00, 3.14, 9.87, 31.01, 97.41, 306.02]]
+V b = [-0.01, 0.61, 0.91, 0.99, 0.60, 0.02]
+
+print(gauss_eliminate(&a, &b))
+===
+template <typename T1, typename T2, typename T3, typename T4> auto swap_row(T1 &a, T2 &b, const T3 &r1, const T4 &r2)
+{
+    if (r1 != r2) {
+        swap(a[r1], a[r2]);
+        swap(b[r1], b[r2]);
+    }
+}
+
+template <typename T1, typename T2> auto gauss_eliminate(T1 &a, T2 &b)
+{
+    for (auto dia : range_el(0, a.len())) {
+        auto [max_row, max] = make_tuple(dia, a[dia][dia]);
+        for (auto row : range_el(dia + 1, a.len())) {
+            auto tmp = abs(a[row][dia]);
+            if (tmp > max)
+                assign_from_tuple(max_row, max, make_tuple(row, tmp));
+        }
+        swap_row(a, b, dia, max_row);
+
+        for (auto row : range_el(dia + 1, a.len())) {
+            auto tmp = a[row][dia] / a[dia][dia];
+            for (auto col : range_el(dia + 1, a.len()))
+                a[row][col] -= tmp * a[dia][col];
+            a[row].set(dia, 0);
+            b[row] -= tmp * b[dia];
+        }
+    }
+    auto r = create_array({0.0}) * a.len();
+    for (auto row : range_ee(a.len() - 1, 0).step(-1)) {
+        auto tmp = b[row];
+        for (auto j : range_el(a.len() - 1, row).step(-1))
+            tmp -= r[j] * a[row][j];
+        r.set(row, tmp / a[row][row]);
+    }
+    return r;
+}
+auto a = create_array({create_array({1.00, 0.00, 0.00, 0.00, 0.00, 0.00}), create_array({1.00, 0.63, 0.39, 0.25, 0.16, 0.10}), create_array({1.00, 1.26, 1.58, 1.98, 2.49, 3.13}), create_array({1.00, 1.88, 3.55, 6.70, 12.62, 23.80}), create_array({1.00, 2.51, 6.32, 15.88, 39.90, 100.28}), create_array({1.00, 3.14, 9.87, 31.01, 97.41, 306.02})});
+auto b = create_array({-0.01, 0.61, 0.91, 0.99, 0.60, 0.02});
+
+struct CodeBlock1
+{
+    CodeBlock1()
+    {
+        print(gauss_eliminate(a, b));
+    }
+} code_block_1;
+
+
+// https://www.rosettacode.org/wiki/Generate_lower_case_ASCII_alphabet
+print(Array(‘a’..‘z’))
+===
+struct CodeBlock1
+{
+    CodeBlock1()
+    {
+        print(create_array(range_ee(u'a'_C, u'z'_C)));
+    }
+} code_block_1;
