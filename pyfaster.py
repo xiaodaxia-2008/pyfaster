@@ -66,6 +66,7 @@ elif args.pybind11:
     os.makedirs(filepath, exist_ok=True)
     filename = os.path.join(filepath, filename)
     cmd = ("g++ `python3-config --cflags --ldflags` -I{} -O3 --shared -fPIC -o {}`python3-config --extension-suffix` {}".format(pybind11_includes, filename, src))
-    os.system(cmd)
+    print(cmd)
+    # os.system(cmd)
 else:
     print("using 'python3 py2cpp.py [-l/c/p] src'")

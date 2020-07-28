@@ -14,7 +14,7 @@ xarr = np.asarray(x)
 yarr = np.asarray(y)
 num = 1000
 
-duration = timeit.timeit("dprod(xarr, yarr)", globals=globals(), number=num)
+duration = timeit.timeit("dprod(x, y)", globals=globals(), number=num)
 print(f"pure python version, average time: {duration/num * 1000} ms")
 
 duration = timeit.timeit("xarr@ yarr", globals=globals(), number=num)
